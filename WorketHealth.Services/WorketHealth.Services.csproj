@@ -11,4 +11,9 @@
     <ProjectReference Include="..\WorketHealth.Domain\WorketHealth.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Diagnostico\" />
+    <Folder Include="Services\Personal\" />
+  </ItemGroup>
+
 </Project>

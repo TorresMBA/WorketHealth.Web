@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WorketHealth.Services;
+using WorketHealth.Services.Services.Empresa;
 using WorketHealth.Web.Models;
 
 namespace WorketHealth.Web.Controllers {
@@ -12,13 +13,16 @@ namespace WorketHealth.Web.Controllers {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ConsumeData consume = new ConsumeData();
             var dataDB = consume.Consumiendo();
-            string pintaEnPantalla = $"Este valor viene de DataAccess: {dataDB}";      
+            string pintaEnPantalla = $"Este valor viene de DataAccess: {dataDB}";
 
-            return View((object)pintaEnPantalla);
+            CompanyServices prueba = new CompanyServices();
+            var result = await prueba.tester();
+
+            return View(result);
         }
 
         public IActionResult Privacy()

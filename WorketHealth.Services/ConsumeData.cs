@@ -5,7 +5,7 @@ namespace WorketHealth.Services {
 
         public int Consumiendo()
         {
-            ClaseTest claseTest = new ClaseTest();
+            WorketHealthContext claseTest = new WorketHealthContext();
 
             var valorDevuelto = claseTest.Devolver();
 
