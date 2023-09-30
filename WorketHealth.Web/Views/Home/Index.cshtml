@@ -1,4 +1,5 @@
-﻿@model string
+﻿@using WorketHealth.Domain.Entities.Empresa;
+@model List<Company>
 
 @{
     ViewData["Title"] = "Home Page";
@@ -7,5 +8,10 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>@Model</p>
+
+    @foreach(var item in Model)
+    {
+        <p>@item.RazonSocial</p>
+    }
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

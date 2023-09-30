@@ -1,6 +1,6 @@
 ﻿
 namespace WorketHealth.DataAccess {
-    public class ClaseTest {
+    public class WorketHealthContext {
 
         public int Devolver()
         {
