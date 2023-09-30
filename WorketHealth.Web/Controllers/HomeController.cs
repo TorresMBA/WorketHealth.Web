@@ -21,6 +21,11 @@ namespace WorketHealth.Web.Controllers {
             return View((object)pintaEnPantalla);
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
