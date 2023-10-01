@@ -3,19 +3,24 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VST-CASA</title>
-@*    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WorketHealth.Web.styles.css" asp-append-version="true" />*@
+    <title>@ViewData["Title"] - VST_CASA</title>
 
-    <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />  
-    <link href="~/lib/css/style.css" rel="stylesheet" />
-    <link href="~/css/charts/c3.css" rel="stylesheet" />
-    <link href="~/css/charts/chartist.css" rel="stylesheet" />
-    <link href="~/css/charts/morris.css" rel="stylesheet" />
-    <link href="~/css/fonts/flag-icon.min.css" rel="stylesheet" />
-    <link href="~/css/fonts/materialdesignicons.min.css" rel="stylesheet" />
-    <link href="~/css/fonts/style.css" rel="stylesheet" />
+    @*
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WorketHealth.Web.styles.css" asp-append-version="true" /> *@
+
+    <link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.min.css" asp-append-version="true">
+    <link href="~/assets/vendor/fonts/circular-std/style.css" rel="stylesheet" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/libs/css/style.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/vendor/fonts/fontawesome/css/fontawesome-all.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/vendor/charts/chartist-bundle/chartist.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/vendor/charts/morris-bundle/morris.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/vendor/charts/c3charts/c3.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/vendor/fonts/flag-icon-css/flag-icon.min.css" asp-append-version="true">
+
+
 
 </head>
 <body>
@@ -454,26 +459,26 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>*@
 
-    <!-- jquery 3.3.1 -->
-    <script src="~/js/jquery/jquery-3.3.1.min.js"></script>
+        <!-- jquery 3.3.1 -->
+    <script src="~/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <!-- bootstap bundle js -->
-    <script src="~/js/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <!-- slimscroll js -->
-    <script src="~/js/slimscroll/jquery.slimscroll.js"></script>
+    <script src="~/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
     <!-- main js -->
-    <script src="~/lib/js/main-js.js"></script>
+    <script src="~/assets/libs/js/main-js.js"></script>
     <!-- chart chartist js -->
-    <script src="~/js/chartist-bundle/chartist.min.js"></script>
+    <script src="~/assets/vendor/charts/chartist-bundle/chartist.min.js"></script>
     <!-- sparkline js -->
-    <script src="~/js/sparkline/jquery.sparkline.js"></script>
+    <script src="~/assets/vendor/charts/sparkline/jquery.sparkline.js"></script>
     <!-- morris js -->
-    <script src="~/js/morris-bundle/raphael.min.js"></script>
-    <script src="~/js/morris-bundle/morris.js"></script>    
+    <script src="~/assets/vendor/charts/morris-bundle/raphael.min.js"></script>
+    <script src="~/assets/vendor/charts/morris-bundle/morris.js"></script>
     <!-- chart c3 js -->
-    <script src="~/js/c3charts/c3.min.js"></script>    
-    <script src="~/js/c3charts/d3-5.4.0.min.js"></script>
-    <script src="~/js/c3charts/c3chartjs.js"></script>
-    <script src="~/lib/js/dashboard-ecommerce.js"></script>
+    <script src="~/assets/vendor/charts/c3charts/c3.min.js"></script>
+    <script src="~/assets/vendor/charts/c3charts/d3-5.4.0.min.js"></script>
+    <script src="~/assets/vendor/charts/c3charts/C3chartjs.js"></script>
+    <script src="~/assets/libs/js/dashboard-ecommerce.js"></script>
 
 
     @await RenderSectionAsync("Scripts", required: false)
