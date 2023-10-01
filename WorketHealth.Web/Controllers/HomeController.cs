@@ -15,8 +15,7 @@ namespace WorketHealth.Web.Controllers {
 
         public async Task<IActionResult> Index()
         {
-            ConsumeData consume = new ConsumeData();
-            var dataDB = consume.Consumiendo();
+            var dataDB = 123;
             string pintaEnPantalla = $"Este valor viene de DataAccess: {dataDB}";
 
             CompanyServices prueba = new CompanyServices();
