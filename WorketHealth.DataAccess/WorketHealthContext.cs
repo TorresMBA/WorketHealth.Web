@@ -1,10 +1,11 @@
-﻿
-namespace WorketHealth.DataAccess {
-    public class WorketHealthContext {
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-        public int Devolver()
+namespace WorketHealth.DataAccess {
+    public class WorketHealthContext : IdentityDbContext{
+
+        public WorketHealthContext(DbContextOptions<WorketHealthContext> options) : base(options)
         {
-            return 5;
         }
     }
 }

@@ -9,6 +9,9 @@
   <ItemGroup>
     <ProjectReference Include="..\WorketHealth.Reporting\WorketHealth.Reporting.csproj" />
     <ProjectReference Include="..\WorketHealth.Services\WorketHealth.Services.csproj" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10" />
+
   </ItemGroup>
 
 </Project>
