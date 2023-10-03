@@ -8,11 +8,13 @@ using WorketHealth.Web.Models;
 namespace WorketHealth.Web.Controllers {
     public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger, SignInManager<IdentityUser> signInManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager , SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
+            _userManager = userManager;
             _signInManager = signInManager;
         }
 
@@ -28,28 +30,30 @@ namespace WorketHealth.Web.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Login(string returnurl = null)
+        public IActionResult Login()
         {
-            ViewData["ReturnUrl"] = returnurl;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(AccesoViewModel accViewModel, string returnurl = null)
+        public async Task<ActionResult> Login(AccesoViewModel accViewModel)
         {
-            ViewData["ReturnUrl"] = returnurl;
-            returnurl = returnurl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByEmailAsync(accViewModel.Email);
 
-                var resultado = await _signInManager.PasswordSignInAsync(accViewModel.Email, accViewModel.Password, accViewModel.RememberMe, lockoutOnFailure: true);
+                if(user == null)
+                {
+                    ModelState.AddModelError(String.Empty, "Acceso Invalido");
+                    return View(accViewModel);
+                }
+
+                var resultado = await _signInManager.PasswordSignInAsync(user, accViewModel.Password, accViewModel.RememberMe, lockoutOnFailure: true);                
 
                 if (resultado.Succeeded)
                 {
-                    //return RedirectToAction("Index", "Home");
-                    //return Redirect(returnurl);
-                    return LocalRedirect(returnurl);
+                    return RedirectToAction("Index", "Home");
                 }
                 if (resultado.IsLockedOut)
                 {

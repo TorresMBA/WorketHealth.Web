@@ -17,19 +17,17 @@ namespace WorketHealth.Web.Controllers
         {
             return View();
         }
+
         [HttpGet]
-        public async Task<ActionResult> Registro(string returnurl = null)
+        public IActionResult Registro()
         {
-            ViewData["ReturnUrl"] = returnurl;
-            RegistroViewModel registroVm = new RegistroViewModel();
-            return View(registroVm);
+            return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Registro(RegistroViewModel rgViewModel, string returnurl = null)
+        public async Task<ActionResult> Registro(RegistroViewModel rgViewModel)
         {
-            ViewData["ReturnUrl"] = returnurl;
-            returnurl = returnurl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
                 var usuario = new IdentityUser
@@ -42,8 +40,7 @@ namespace WorketHealth.Web.Controllers
                 if (resultado.Succeeded)
                 {
                     await _signInManager.SignInAsync(usuario, isPersistent: false);
-                    //return RedirectToAction("Index", "Home");
-                    return LocalRedirect(returnurl);
+                    return RedirectToAction("login", "Home");                    
                 }
                 ValidarErrores(resultado);
             }
