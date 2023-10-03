@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using WorketHealth.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,16 @@ builder.Services.AddDbContext<WorketHealthContext>(c => {
     c.UseSqlServer(builder.Configuration.GetConnectionString("ProjectAzureDsn"));
 });
 #endregion
+
+//Agregar Servicoi Identity a la aplicacion
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<WorketHealthContext>();
+
+//Esta es la linea para la url de retorno al acceder
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = new PathString("/Home/Login");
+    options.AccessDeniedPath = new PathString("/Home/Bloqueado");
+});
 
 var app = builder.Build();
 
@@ -47,6 +58,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//Se agrega la authenticacion
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

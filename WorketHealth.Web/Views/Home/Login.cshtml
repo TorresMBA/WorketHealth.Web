@@ -1,4 +1,4 @@
-﻿@*   @model *@
+﻿@model AccesoViewModel
 @{
     ViewData["Title"] = "Inicio de Sección";
     Layout = null;
@@ -15,27 +15,41 @@
         <div class="card ">
             <div class="card-header text-center"><a href=""><img class="logo-img" src="../assets/images/logo.png" alt="logo"></a><span class="splash-description">Por favor ingrese su información de usuario.</span></div>
             <div class="card-body">
-                <form asp-controller="Home" asp-action="Index" method="post">
+
+                <form asp-controller="Home" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                     <div class="form-group">
-                        <input class="form-control form-control-lg" id="username" type="text" placeholder="Nombre de usuario" autocomplete="off">
+                        <input asp-for="Email" class="form-control form-control-lg" id="username" type="text" placeholder="Nombre de usuario" autocomplete="off">
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input class="form-control form-control-lg" id="password" type="password" placeholder="Contraseña">
+                        <input asp-for="Password"  class="form-control form-control-lg" id="password" type="password" placeholder="Contraseña">
+                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox"><span class="custom-control-label">Recordar</span>
+                        <label asp-for="RememberMe" class="custom-control custom-checkbox">
+                            <input asp-for="RememberMe"  class="custom-control-input" type="checkbox">
+                                <span class="custom-control-label">@Html.DisplayNameFor(m => m.RememberMe)</span>                                
                         </label>
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg btn-block">Iniciar sesión</button>
                 </form>
+
             </div>
-            <div class="card-footer bg-white p-0  ">
+            @*  -- En Observacion El Boton Haz olvidado tu contraseña*@
+              <div class="card-footer bg-white p-0  ">
                 <div class="card-footer-item card-footer-item-bordered">
-                    <a href="#" class="footer-link">Crea una cuenta</a></div>
+                <a class="footer-link" asp-area="" asp-controller="Cuentas" asp-action="Registro" >Crea una cuenta</a>
+            </div>
                 <div class="card-footer-item card-footer-item-bordered">
                     <a href="#" class="footer-link">Has olvidado tu contraseña</a>
                 </div>
             </div>
         </div>
     </div>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
