@@ -1,0 +1,54 @@
+﻿@model RegistroViewModel
+
+@{
+    ViewData["Title"] = "Registro de Usuario";
+   // Layout = null;
+
+    //<!-- Bootstrap CSS -->
+    //<link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.min.css">
+    //<link href="~/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    //<link rel="stylesheet" href="~/assets/libs/css/style.css">
+    //<link rel="stylesheet" href="~/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+  
+}
+
+<form class="splash-container" asp-controller="Cuentas" asp-action="Registro" method="post">
+    <div class="text-danger" asp-validation-summary="All"></div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="mb-1">Registro de Usuario</h3>
+            <p>Por favor ingrese su información de usuario.</p>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <input asp-for="UserName" class="form-control form-control-lg" type="text" name="UserName" required="" placeholder="Username" autocomplete="off">
+
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Email" class="form-control form-control-lg" type="email" name="email" required="" placeholder="Email" autocomplete="off">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Password" class="form-control form-control-lg" id="pass1" type="password" required="" placeholder="Password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="ConfirmPassword" class="form-control form-control-lg" required="" placeholder="Confirm">
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group pt-2">
+                <button class="btn btn-block btn-primary" type="submit">Registrar cuenta</button>
+            </div>
+        </div>
+        <div class="card-footer bg-white">
+            <p>¿Ya tienes una cuenta? <a class="text-secondary" asp-area="" asp-controller="Home" asp-action="Login">Entre aquí.</a></p>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

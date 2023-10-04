@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WorketHealth.Services;
@@ -9,12 +10,14 @@ namespace WorketHealth.Web.Controllers {
     public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager , SignInManager<IdentityUser> signInManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager , SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
         }
 
@@ -30,8 +33,20 @@ namespace WorketHealth.Web.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Login()
+        [AllowAnonymous]
+        public async Task<IActionResult> Login()
         {
+            // Para la cracion de los roles
+            if (!await _roleManager.RoleExistsAsync("Administrador"))
+            {
+                //Creacion de rol administrador
+                await _roleManager.CreateAsync(new IdentityRole("Administrador"));
+            }
+            if (!await _roleManager.RoleExistsAsync("Registrado"))
+            {
+                //Creacion de rol usuario registrado
+                await _roleManager.CreateAsync(new IdentityRole("Registrado"));
+            }
             return View();
         }
 

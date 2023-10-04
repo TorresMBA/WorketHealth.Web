@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WorketHealth.Web.Models;
 namespace WorketHealth.Web.Controllers
@@ -19,6 +20,7 @@ namespace WorketHealth.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Registro()
         {
             return View();
@@ -26,6 +28,7 @@ namespace WorketHealth.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<ActionResult> Registro(RegistroViewModel rgViewModel)
         {
             if (ModelState.IsValid)
@@ -39,6 +42,10 @@ namespace WorketHealth.Web.Controllers
 
                 if (resultado.Succeeded)
                 {
+
+                    //Esta linea es para la asignacion  del usuario que se registra
+                    await _userManager.AddToRoleAsync(usuario, "Registrado");
+
                     await _signInManager.SignInAsync(usuario, isPersistent: false);
                     return RedirectToAction("login", "Home");                    
                 }
@@ -55,9 +62,46 @@ namespace WorketHealth.Web.Controllers
             }
         }
 
+        //Registro especial admin
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> RegistroAdmin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<ActionResult> RegistroAdmin(RegistroViewModel rgViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var usuario = new IdentityUser
+                {
+                    UserName = rgViewModel.UserName,
+                    Email = rgViewModel.Email,
+                };
+                var resultado = await _userManager.CreateAsync(usuario, rgViewModel.Password);
+
+                if (resultado.Succeeded)
+                {
+
+                    //Esta linea es para la asignacion  del usuario que se registra
+                    await _userManager.AddToRoleAsync(usuario, "Registrado");
+
+                    await _signInManager.SignInAsync(usuario, isPersistent: false);
+                    return RedirectToAction("login", "Home");
+                }
+                ValidarErrores(resultado);
+            }
+            return View(rgViewModel);
+        }
+
         //Salir o cerra cession de la aplicacion (logout)
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> SalirAplicacion()
         {
             await _signInManager.SignOutAsync();
