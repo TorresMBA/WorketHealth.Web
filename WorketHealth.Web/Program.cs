@@ -14,7 +14,13 @@ builder.Services.AddDbContext<WorketHealthContext>(c => {
 #endregion
 
 //Agregar Servicoi Identity a la aplicacion
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<WorketHealthContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    // Otras configuraciones aquí...
+    options.SignIn.RequireConfirmedAccount = false; // Deshabilitar la confirmación de cuenta
+    options.SignIn.RequireConfirmedEmail = false; // Deshabilitar la confirmación de correo electrónico
+    options.Password.RequireNonAlphanumeric = true; // Requiere caracteres no alfanuméricos en la contraseña
+}).AddEntityFrameworkStores<WorketHealthContext>().AddDefaultTokenProviders();
 
 //Esta es la linea para la url de retorno al acceder
 builder.Services.ConfigureApplicationCookie(options =>

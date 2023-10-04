@@ -12,7 +12,7 @@
   
 }
 
-<form class="splash-container" asp-controller="Cuentas" asp-action="Registro" method="post">
+<form class="splash-container" asp-controller="Cuentas" asp-action="RegistroAdmin" method="post">
     <div class="text-danger" asp-validation-summary="All"></div>
     <div class="card">
         <div class="card-header">
@@ -37,6 +37,14 @@
                 <input asp-for="ConfirmPassword" class="form-control form-control-lg" required="" placeholder="Confirm">
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
+            @*Seleccion de rol*@
+            <div class="form-group">
+                <select class="form-control" asp-for="RolSeleccionado" asp-items="@Model.ListaRoles">
+                    <option disabled selected>-- Selccionar rol--</option>
+                </select>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            
             <div class="form-group pt-2">
                 <button class="btn btn-block btn-primary" type="submit">Registrar cuenta</button>
             </div>

@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> _SignInManager
+@inject UserManager<IdentityUser> _UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -328,7 +332,10 @@
                                         }                                       
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/data-tables.html">Acceso a modulos</a>
+                                            <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="EditarPerfil" asp-route-id="@_UserManager.GetUserId(User)">Editar Perfil</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="CambiarPassword" >Cambiar Contraseña</a>
                                         </li>
                                     </ul>
                                 </div>

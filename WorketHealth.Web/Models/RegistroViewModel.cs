@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace WorketHealth.Web.Models
 {
@@ -24,6 +25,11 @@ namespace WorketHealth.Web.Models
         [Display(Name = "Confirmar Contraseña")]
         public string ConfirmPassword { get; set; }
 
+        //Para seleccion de roles
+        [Display(Name = "Seleccionar Rol")]
+        public IEnumerable<SelectListItem> ListaRoles { get; set; }
+        [Display(Name = "Rol seleccionado")]
+        public string RolSeleccionado { get; set; }
 
     }
 }

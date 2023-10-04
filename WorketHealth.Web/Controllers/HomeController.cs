@@ -93,5 +93,13 @@ namespace WorketHealth.Web.Controllers {
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Bloquedo(string returnurl =null)
+        {
+            ViewData["ReturnUrl"] = returnurl;
+            returnurl = returnurl ?? Url.Content("~/");
+            return View();
+        }
     }
 }
