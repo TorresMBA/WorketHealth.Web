@@ -38,7 +38,7 @@
         <!-- ============================================================== -->
         <div class="dashboard-header">
             <nav class="navbar navbar-expand-lg bg-white fixed-top">
-                <a class="navbar-brand" href="index.html">Concept</a>
+                <a class="navbar-brand" href="index.html">VST-CASA</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -141,7 +141,9 @@
                                 </div>
                                 <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Cuenta</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Configuración</a>
-                                <a class="dropdown-item" asp-controller="Cuentas" asp-action="SalirAplicacion" method="post"><i class="fas fa-power-off mr-2"></i>Cerrar sesión</a>
+                                    <form id="logoutForm" method="post" class="navbar-nav" asp-controller="Cuentas" asp-action="SalirAplicacion">
+                                        <button class="dropdown-item" style="padding:0px;" type="submit"><a class="dropdown-item"><i class="fas fa-power-off mr-2"></i>Cerrar sesión</a></button>
+                                    </form>
                             </div>
                         </li>
                     </ul>
