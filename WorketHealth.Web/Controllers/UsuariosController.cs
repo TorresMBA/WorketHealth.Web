@@ -6,6 +6,7 @@ using WorketHealth.Web.Models;
 
 namespace WorketHealth.Web.Controllers
 {
+    [Authorize]
     public class UsuariosController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
