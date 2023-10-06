@@ -42,6 +42,7 @@ namespace WorketHealth.Web.Controllers
             TempData["Correcto"] = "Rol Creado correctamente";
             return RedirectToAction(nameof(Index));
         }
+
         [HttpGet]
         public IActionResult Editar(String id)
         {

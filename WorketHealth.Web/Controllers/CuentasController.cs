@@ -142,7 +142,7 @@ namespace WorketHealth.Web.Controllers
                 ListaRoles = listaRoles
             };
 
-            return View(rgViewModel);
+            return View(registroVM);
         }
 
         //Salir o cerra cession de la aplicacion (logout)

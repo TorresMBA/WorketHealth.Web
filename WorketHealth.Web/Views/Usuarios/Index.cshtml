@@ -1,0 +1,157 @@
+﻿@model IEnumerable<WorketHealth.Web.Models.AppUsuario>
+
+@{
+    ViewData["Title"] = "Administracion de usuarios";
+}
+<div class="container-fluid  dashboard-content">
+    <!-- ============================================================== -->
+    <!-- pageheader -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+                <h2 class="pageheader-title">Lista de Roles</h2>
+                <p class="pageheader-text">.</p>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">...</a></li>
+                            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">...</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Administrador de usuarios</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["Correcto"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Correcto"]
+            <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+        </div>
+    }
+    <!-- ============================================================== -->
+    <!-- end pageheader -->
+    <!-- ============================================================== -->
+
+    <div class="form-group row text-right">
+        <div class="col col-sm-12 col-lg-12">
+            <a asp-controller="Usuarios" asp-action="Crear"><button type="submit" class=" btn btn-space btn-success" disabled><i class="far fa-plus-square"></i> Crear un nuevo USUARIO</button></a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- ============================================================== -->
+        <!-- basic table  -->
+        <!-- ============================================================== -->
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <h5 class="card-header">Lista de usuarios</h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+
+                        @if (Model.Count() > 0)
+                        {
+
+                            <table class="table table-striped table-bordered first">
+                                <thead>
+                                    <tr>
+                                        <th>@Html.DisplayNameFor(m => m.Id)</th>
+                                        <th>@Html.DisplayNameFor(m => m.UserName)</th>
+                                        <th>@Html.DisplayNameFor(m => m.Email)</th>
+                                        <th>@Html.DisplayNameFor(m => m.Rol)</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(m => item.Id)</td>
+                                            <td>@Html.DisplayFor(m => item.UserName)</td>
+                                            <td>@Html.DisplayFor(m => item.Email)</td>
+                                            <td>@Html.DisplayFor(m => item.Rol)</td>
+                                            <td>
+                                                <form asp-action="Borrar" asp-route-idUsuario="@item.Id">
+                                                    <a class="btn btn-space btn-primary" style="float:left;" asp-controller="Usuarios" asp-action="Editar" asp-route-id="@item.Id">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </a>                                                    
+                                                    <button type="submit" class="btn btn-space btn-danger" onclick="return confirm('Esta seguro de quere borrar a este usario')">
+                                                        <i class="fas fa-trash-alt"></i> Borrar
+                                                    </button>
+                                                    @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                                                    {
+                                                        <button asp-action="BloquearDesbloquear" asp-route-idUsuario="@item.Id" class="btn btn-dark" style="cursor:pointer">
+                                                            <strong><i class="fas fa-lock"></i> Bloquear</strong>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button asp-action="BloquearDesbloquear" asp-route-idUsuario="@item.Id" class="btn btn-light btn-outline-dark" style="cursor:pointer">
+                                                            <strong><i class="fas fa-lock-open"></i> Desbloquear</strong>
+                                                        </button>
+                                                    }@*
+                                            <a class="btn btn-space btn-dark" style="float:left;" asp-controller="Usuarios" asp-action="Bloquear" asp-route-id="@item.Id">
+                                            <i class="fas fa-lock"></i> Bloquear
+                                            </a>*@
+                                                    @* <a class="btn btn-space btn-danger" style="float:left;" asp-controller="Usuarios" asp-action="Borrar" asp-route-id="@item.Id">
+                                            <i class="fas fa-trash-alt"></i> Borrar
+                                            </a>*@
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Rol</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>No hay registros</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- end basic table  -->
+        <!-- ============================================================== -->
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/vendor/datatables/js/dataTables.bootstrap4.min.js"></script>-
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendor/datatables/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/vendor/datatables/js/data-table.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/rowgroup/1.0.4/js/dataTables.rowGroup.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.2.7/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js"></script>
+
+}

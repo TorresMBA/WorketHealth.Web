@@ -27,9 +27,9 @@ namespace WorketHealth.Web.Models
 
         //Para seleccion de roles
         [Display(Name = "Seleccionar Rol")]
-        public IEnumerable<SelectListItem> ListaRoles { get; set; }
+        public IEnumerable<SelectListItem> ?ListaRoles { get; set; }
         [Display(Name = "Rol seleccionado")]
-        public string RolSeleccionado { get; set; }
+        public string ?RolSeleccionado { get; set; }
 
     }
 }

@@ -1,0 +1,50 @@
+﻿@model AppUsuario
+
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+<div class="clase-especial splash-container">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+        </div>
+    }
+    <div class="card ">
+        <div class="card-header" style="text-align:center">
+            <h3 class="mb-1">Editar Usuario</h3>
+        </div>
+        <div class="card-body">
+            <form asp-controller="Usuarios" asp-action="Editar" method="post">
+                <input asp-for="@Model.Id" type="hidden" />
+                <div class="text-danger" asp-validation-summary="All"></div>
+
+                <div class="form-group">
+                    <input asp-for="UserName" readonly class="form-control form-control-lg" id="username" type="text" placeholder="Nombre del usuario">
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Email" readonly class="form-control form-control-lg" id="username" type="text" placeholder="Email del usuario">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                 <div class="form-group">
+                     <label for="input-select">Seleccionar Rol</label>
+                    <select class="form-control" asp-for="IdRol" asp-items="@Model.ListaRoles">
+                        <option disabled selected>-- Selccionar rol--</option>
+                    </select>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Editar usuario</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
