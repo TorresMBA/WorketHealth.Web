@@ -14,6 +14,8 @@ namespace WorketHealth.Web.Models
         [NotMapped]
         public string ?Rol { get; set; }
         [NotMapped]
+        public string ?RoleName { get; set; }
+        [NotMapped]
         public IEnumerable<SelectListItem> ?ListaRoles { get; set; }
     }
 }

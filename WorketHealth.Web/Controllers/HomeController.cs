@@ -68,6 +68,16 @@ namespace WorketHealth.Web.Controllers {
 
                 if (resultado.Succeeded)
                 {
+                    // Usuario autenticado correctamente
+                    // Ahora, obtén los roles asignados al usuario
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    if (roles.Count > 0)
+                    {
+                        // Aquí puedes usar los roles de alguna manera
+                        // Puedes almacenarlos en una variable o mostrarlos en la vista, por ejemplo
+                        TempData["UserRole"] = string.Join(", ", roles);
+                    }
                     return RedirectToAction("Index", "Home");
                 }
                 if (resultado.IsLockedOut)
