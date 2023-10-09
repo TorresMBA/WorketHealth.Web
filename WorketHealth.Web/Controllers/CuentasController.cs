@@ -2,15 +2,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using WorketHealth.Web.Models;
+using WorketHealth.DataAccess.Models;
 namespace WorketHealth.Web.Controllers
 {
     public class CuentasController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppUsuario> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public CuentasController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public CuentasController(UserManager<AppUsuario> userManager, SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -30,11 +30,11 @@ namespace WorketHealth.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public async Task<ActionResult> Registro(RegistroViewModel rgViewModel)
+        public async Task<ActionResult> Registro(Models.RegistroViewModel rgViewModel)
         {
             if (ModelState.IsValid)
             {
-                var usuario = new IdentityUser
+                var usuario = new AppUsuario
                 {
                     UserName = rgViewModel.UserName.Replace(" ", ""),
                     Email = rgViewModel.Email,
@@ -82,7 +82,7 @@ namespace WorketHealth.Web.Controllers
                 Text = "Administrador"
             });
 
-            RegistroViewModel registroVM = new RegistroViewModel()
+            Models.RegistroViewModel registroVM = new Models.RegistroViewModel()
             {
                 ListaRoles = listaRoles
             };
@@ -92,12 +92,11 @@ namespace WorketHealth.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrador")]
-        public async Task<ActionResult> RegistroAdmin(RegistroViewModel rgViewModel)
+        public async Task<ActionResult> RegistroAdmin(Models.RegistroViewModel rgViewModel)
         {
             if (ModelState.IsValid)
             {
-                var usuario = new IdentityUser
-                {
+                var usuario = new AppUsuario {
                     UserName = rgViewModel.UserName.Replace(" ", ""),
                     Email = rgViewModel.Email,
                 };
@@ -137,7 +136,7 @@ namespace WorketHealth.Web.Controllers
                 Text = "Administrador"
             });
 
-            RegistroViewModel registroVM = new RegistroViewModel()
+            Models.RegistroViewModel registroVM = new Models.RegistroViewModel()
             {
                 ListaRoles = listaRoles
             };

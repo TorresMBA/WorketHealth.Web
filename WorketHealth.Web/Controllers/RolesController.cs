@@ -2,16 +2,17 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WorketHealth.DataAccess;
+using WorketHealth.DataAccess.Models;
 
 namespace WorketHealth.Web.Controllers
 {
     [Authorize(Roles = "Administrador")]
     public class RolesController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppUsuario> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly WorketHealthContext _contexto;
-        public RolesController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, WorketHealthContext contexto)
+        public RolesController(UserManager<AppUsuario> userManager, RoleManager<IdentityRole> roleManager, WorketHealthContext contexto)
         {
             _userManager = userManager;
             _roleManager = roleManager;

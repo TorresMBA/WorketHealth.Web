@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WorketHealth.DataAccess;
+using WorketHealth.DataAccess.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddDbContext<WorketHealthContext>(c => {
 #endregion
 
 //Agregar Servicoi Identity a la aplicacion
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<AppUsuario, IdentityRole>(options =>
 {
     // Otras configuraciones aquí...
     options.SignIn.RequireConfirmedAccount = false; // Deshabilitar la confirmación de cuenta

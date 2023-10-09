@@ -2,18 +2,17 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using WorketHealth.Services;
+using WorketHealth.DataAccess.Models;
 using WorketHealth.Services.Services.Empresa;
-using WorketHealth.Web.Models;
 
 namespace WorketHealth.Web.Controllers {
     public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppUsuario> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<AppUsuario> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager , SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<AppUsuario> userManager , SignInManager<AppUsuario> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _userManager = userManager;
@@ -52,7 +51,7 @@ namespace WorketHealth.Web.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(AccesoViewModel accViewModel)
+        public async Task<ActionResult> Login(Models.AccesoViewModel accViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +100,7 @@ namespace WorketHealth.Web.Controllers {
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new Models.ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         [HttpGet]
         [AllowAnonymous]

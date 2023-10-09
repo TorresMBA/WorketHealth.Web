@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WorketHealth.DataAccess;
-using WorketHealth.Web.Models;
+using WorketHealth.DataAccess.Models;
 
 namespace WorketHealth.Web.Controllers
 {
     [Authorize]
     public class UsuariosController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppUsuario> _userManager;
         private readonly WorketHealthContext _contexto;
 
-        public UsuariosController(UserManager<IdentityUser> userManager, WorketHealthContext contexto)
+        public UsuariosController(UserManager<AppUsuario> userManager, WorketHealthContext contexto)
         {
             _userManager = userManager;
             _contexto = contexto;
@@ -25,13 +25,12 @@ namespace WorketHealth.Web.Controllers
             var usuarios = await _contexto.Users.ToListAsync();
             var rolesUsuario = await _contexto.UserRoles.ToListAsync();
             var roles = await _contexto.Roles.ToListAsync();
-            List<AppUsuario> listaUsuarios = new List<AppUsuario>();
+            List<Models.AppUsuario> listaUsuarios = new List<Models.AppUsuario>();
 
             foreach (var usuario in usuarios)
             {
                 var rol = rolesUsuario.FirstOrDefault(u => u.UserId == usuario.Id);
-                var appUsuario = new AppUsuario
-                {
+                var appUsuario = new Models.AppUsuario {
                     Id = usuario.Id,
                     UserName = usuario.UserName,
                     Email = usuario.Email,
@@ -66,7 +65,7 @@ namespace WorketHealth.Web.Controllers
             {
                 return NotFound();
             }
-            AppUsuario appUsuario = new AppUsuario();
+            Models.AppUsuario appUsuario = new Models.AppUsuario();
             appUsuario.UserName = usuarioBD.UserName;
             appUsuario.Email = usuarioBD.Email;
            
@@ -89,7 +88,7 @@ namespace WorketHealth.Web.Controllers
         [Authorize(Roles = "Administrador")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(AppUsuario usuario)
+        public async Task<IActionResult> Editar(Models.AppUsuario usuario)
         {
             
             if (ModelState.IsValid)
@@ -215,7 +214,7 @@ namespace WorketHealth.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<ActionResult> CambiarPassword(CambiarPasswordViewModel cpViewModel, string email)
+        public async Task<ActionResult> CambiarPassword(Models.CambiarPasswordViewModel cpViewModel, string email)
         {
             if (ModelState.IsValid)
             {
