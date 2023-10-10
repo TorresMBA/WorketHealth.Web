@@ -37,7 +37,7 @@
                 <input asp-for="ConfirmPassword" class="form-control form-control-lg" required="" placeholder="Confirm">
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-            @*Seleccion de rol*@
+            Seleccion de rol
             <div class="form-group">
                 <select class="form-control" asp-for="RolSeleccionado" asp-items="@Model.ListaRoles">
                     <option disabled selected>-- Selccionar rol--</option>
@@ -48,9 +48,6 @@
             <div class="form-group pt-2">
                 <button class="btn btn-block btn-primary" type="submit">Registrar cuenta</button>
             </div>
-        </div>
-        <div class="card-footer bg-white">
-            <p>¿Ya tienes una cuenta? <a class="text-secondary" asp-area="" asp-controller="Home" asp-action="Login">Entre aquí.</a></p>
         </div>
     </div>
 </form>

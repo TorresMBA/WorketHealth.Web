@@ -8,9 +8,9 @@ namespace WorketHealth.Web.Controllers
     public class CuentasController : Controller
     {
         private readonly UserManager<AppUsuario> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<AppUsuario> _signInManager;
 
-        public CuentasController(UserManager<AppUsuario> userManager, SignInManager<IdentityUser> signInManager)
+        public CuentasController(UserManager<AppUsuario> userManager, SignInManager<AppUsuario> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -65,7 +65,7 @@ namespace WorketHealth.Web.Controllers
 
         //Registro especial admin
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> RegistroAdmin()
         {
 
@@ -113,9 +113,7 @@ namespace WorketHealth.Web.Controllers
                     {
                     //Esta linea es para la asignacion  del usuario que se registra
                         await _userManager.AddToRoleAsync(usuario, "Registrado");
-                    }
-
-                    
+                    }                   
 
                     await _signInManager.SignInAsync(usuario, isPersistent: false);
                     return RedirectToAction("login", "Home");

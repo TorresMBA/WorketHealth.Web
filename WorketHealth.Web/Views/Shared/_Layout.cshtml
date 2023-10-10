@@ -308,7 +308,7 @@
                                     </ul>
                                 </div>
                             </li>*@
-                            <li class="nav-item">
+                            @*<li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-fw fa-wrench"></i>Ajustes</a>
                                 <div id="submenu-6" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
@@ -320,10 +320,10 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </li>
+                            </li>*@
 
                             <li class="nav-divider">
-                                Accesos
+                               Seguridad y Accesos
                             </li>
 
                             <li class="nav-item">
@@ -332,25 +332,45 @@
                                     <ul class="nav flex-column">
                                         @if (User.IsInRole("Administrador"))
                                         {
+                                            <li class="nav-item">
+                                                <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index"> Gestión de Usuarios y Roles <span class="badge badge-success ml-1">New</span></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" asp-area="" asp-controller="Roles" asp-action="Index"> Gestión de Roles <span class="badge badge-success ml-1">New</span></a>
+                                            </li>
+                                        }
+                                       @* <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="CambiarPassword">Contraseñas y Autenticación</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Registro de Actividad y Auditoría</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Control de Sesiones</a>
+                                        </li>*@
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="EditarPerfil" asp-route-id="@_UserManager.GetUserId(User)">Gestión de Perfil</a>
+                                        </li>
+                                        @if (User.IsInRole("Administrador"))
+                                        {
                                             string n1 = "Cuentas";
 
                                             <li class="nav-item">
                                                 <a class="nav-link" asp-area="" asp-controller="@n1" asp-action="RegistroAdmin" >Nuevo usuario</a>
-                                            </li>
+                                            </li>@*
                                             <li class="nav-item">
                                                 <a class="nav-link" asp-area="" asp-controller="Roles" asp-action="Index">Administracion de roles</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">Administracion de usuario</a>
-                                            </li>
+                                            </li>*@
                                         }                                       
 
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="EditarPerfil" asp-route-id="@_UserManager.GetUserId(User)">Editar Perfil</a>
-                                        </li>
+                                        @*
                                         <li class="nav-item">
                                             <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="CambiarPassword" >Cambiar Contraseña</a>
-                                        </li>
+                                        </li>*@
+                                        
                                     </ul>
                                 </div>
                             </li>
