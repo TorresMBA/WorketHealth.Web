@@ -195,9 +195,10 @@
                                                 </ul>
                                             </div>
                                         </li>*@
-                                        <li class="nav-item" style="cursor:pointer;">
-                                            <a class="nav-link" @*href="dashboard-finance.html"*@>Definiendo</a>
-                                        </li>@*
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Trujillo" asp-action="Index">Trujillo <span class="badge badge-secondary ml-1">New</span></a>
+                                        </li>
+                                        @*
                                         <li class="nav-item">
                                             <a class="nav-link" href="dashboard-sales.html">Sales</a>
                                         </li>
@@ -225,7 +226,7 @@
                                 <div id="submenu-2" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/cards.html">Trujillo <span class="badge badge-secondary ml-1">New</span></a>
+                                            <a class="nav-link" asp-area="" asp-controller="ImportarData" asp-action="Index">Importar Datos <span class="badge badge-secondary ml-1">New</span></a>
                                         </li>
                                         @*<li class="nav-item">
                                             <a class="nav-link" href="pages/general.html">General</a>
@@ -333,10 +334,10 @@
                                         @if (User.IsInRole("Administrador"))
                                         {
                                             <li class="nav-item">
-                                                <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index"> Gestión de Usuarios y Roles <span class="badge badge-success ml-1">New</span></a>
+                                                <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index"> Gestión de Usuarios y Roles @*<span class="badge badge-success ml-1">New</span>*@</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" asp-area="" asp-controller="Roles" asp-action="Index"> Gestión de Roles <span class="badge badge-success ml-1">New</span></a>
+                                                <a class="nav-link" asp-area="" asp-controller="Roles" asp-action="Index"> Gestión de Roles @*<span class="badge badge-success ml-1">New</span>*@</a>
                                             </li>
                                         }
                                        @* <li class="nav-item">
@@ -379,7 +380,7 @@
                                 Features
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-fw fa-file"></i> Pages </a>
+                                 -              <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-fw fa-file"></i> Pages </a>
                                 <div id="submenu-6" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">

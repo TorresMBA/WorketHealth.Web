@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using WorketHealth.DataAccess;
 using WorketHealth.DataAccess.Models;
 
@@ -30,6 +31,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = new PathString("/Home/Bloqueado");
 });
 
+//// Configurar el LicenseContext desde appsettings.json
+//var epPlusSettings = builder.Configuration.GetSection("EPPlus").Get<EPPlusSettings>();
+//if (epPlusSettings != null)
+//{
+//    if (epPlusSettings.LicenseContext == "Commercial")
+//    {
+//        ExcelPackage.LicenseContext = LicenseContext.Commercial;
+//    }
+//    else if (epPlusSettings.LicenseContext == "NonCommercial")
+//    {
+//        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+//    }
+//}
 //Estas son opciones de configuracion del identity
 //builder.Services.Configure<IdentityOptions>(options => {
 //    options.Password.RequiredLength = 5;

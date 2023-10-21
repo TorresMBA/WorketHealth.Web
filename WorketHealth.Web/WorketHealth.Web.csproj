@@ -9,8 +9,11 @@
   <ItemGroup>
     <ProjectReference Include="..\WorketHealth.Reporting\WorketHealth.Reporting.csproj" />
     <ProjectReference Include="..\WorketHealth.Services\WorketHealth.Services.csproj" />
+    <PackageReference Include="EPPlus" Version="6.2.10" />
 
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10" />
+
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 
   </ItemGroup>
 

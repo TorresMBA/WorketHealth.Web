@@ -1,0 +1,51 @@
+﻿@using WorketHealth.Web.Models
+@model ProyectoViewModel
+@{
+    ViewData["Title"] = "Proyecto Trujillo";
+}
+<div class="influence-finder">
+     <div class="container-fluid dashboard-content">
+        <div class="row">
+            <!-- ============================================================== -->
+            <!-- search bar  -->
+            <!-- ============================================================== -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                             <div class="form-group row">
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12" >
+                                    <label class="col-12 col-sm-3 col-form-label text-sm-right">Seleccione un mes</label>
+                                    <div class="col-sm-12 col-lg-12 mb-sm-12">
+                                        <select class="form-control" asp-for="MesSeleccionado">
+                                            <option disabled selected>-- Seleccione un Mes --</option>
+                                            @foreach (var mes in Model.ListaMes)
+                                                {
+                                                    <option value="@mes.Value" selected="@((mes.Value == ViewBag.MesActual))">@mes.Text</option>
+                                                }
+                                        </select>
+                                     </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
+                                    <label class="col-12 col-sm-3 col-form-label text-sm-right">Seleccione un año</label>
+                                    <div class="col-sm-12 col-lg-12 mb-sm-12">
+                                        <select class="form-control" asp-for="AnhoSeleccionado">
+                                            <option disabled selected>-- Seleccione un Año --</option>
+                                            @foreach (var anho in Model.ListaAnho)
+                                            {
+                                                <option value="@anho.Value" selected="@((anho.Value == ViewBag.AñoActual))">@anho.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end search bar  -->
+            <!-- ============================================================== -->
+        </div>
+     </div>
+</div>

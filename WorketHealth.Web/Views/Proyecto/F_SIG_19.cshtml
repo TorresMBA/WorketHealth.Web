@@ -1,0 +1,186 @@
+﻿@model List<WorketHealth.DataAccess.Models.Registros.F_SEG_19>
+@{
+    ViewData["Title"] = "Importar Excel";
+}
+<div class="container-fluid  dashboard-content">
+    @if (TempData["Correcto"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Correcto"]
+            <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+        </div>
+    }
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                
+                <div class="card-header d-flex" >
+                    <h5 class="card-header-title">F_SIG_19 Seguim.</h5>
+                    <div class="toolbar ml-auto">                        
+
+                                <a href="#" data-toggle="modal" data-target="#exampleModal">
+                                    <button type="submit" class=" btn btn-success btn-sm">
+                                    <i class="fas fa-file-excel"></i> Importar Excel
+                                    </button>
+                                </a>
+                                <a href="#" >
+                                    <button id="enviarDatosButton" type="submit" class=" btn btn-danger btn-sm">
+                                            <i class="fas fa-database"></i> Insertar en BD
+                                     </button>
+                                </a>
+
+                        </div>
+                </div>                
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">DNI</th>
+                                    <th scope="col">PrimerNombre</th>
+                                    <th scope="col">SegundoNombre</th>
+                                    <th scope="col">PrimerApellido</th>
+                                    <th scope="col">SegundoApellido</th>
+                                    <th scope="col">FechaNac.</th>
+                                    <th scope="col">Sexo</th>
+                                    <th scope="col">TipoExamen</th>
+                                    <th scope="col">FechaExamen</th>
+                                    <th scope="col">Area</th>
+                                    <th scope="col">PuestoTrabajo</th>
+                                    <th scope="col">Aptitud</th>
+                                    <th scope="col">Restricciones</th>
+                                    <th scope="col">EC</th>
+                                    <th scope="col">ERT</th>
+                                    <th scope="col">EP</th>
+                                    <th scope="col" style="display:none">RUC</th>
+                                    <th scope="col" style="display:none">MES</th>
+                                    <th scope="col" style="display:none">ANHO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    @foreach (var data in Model)
+                                    {
+                                        <tr>    
+                                            <td>@data.Id</td>
+                                            <td>@data.DNI</td>
+                                            <td>@data.PrimerNombre </td>                                            
+                                            <td>@data.SegundoNombre </td>                                            
+                                            <td>@data.PrimerApellido </td>                                            
+                                            <td>@data.SegundoApellido</td>                                            
+                                            <td>@data.FechaNacimiento</td>                                            
+                                            <td>@data.Sexo </td>                                            
+                                            <td>@data.TipoExamen </td>                                            
+                                            <td>@data.FechaExamen </td>                                            
+                                            <td>@data.Area</td>                                            
+                                            <td>@data.PuestoDeTrabajo</td>                                            
+                                            <td>@data.Aptitud </td>                                            
+                                            <td>@data.Restricciones </td>                                            
+                                            <td>@data.ID_EC </td>                                            
+                                            <td>@data.ID_ERT</td>                                            
+                                            <td>@data.ID_EP </td>                                            
+                                            <td style="display:none" >@data.RUC</td>
+                                            <td style="display:none" >@data.Mes</td>
+                                            <td style="display:none" >@data.Anho</td>
+                                        </tr>
+                                    }
+
+                                }
+                                else
+                                {
+                                    <tr style="text-align:center;"><td colspan ="11">No hay registros</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>                    
+                </div>                
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+
+        <form asp-action="F_SIG_19" method="post" enctype="multipart/form-data">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Importar Excel</h5>
+                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </a>
+                </div>
+
+                <div class="modal-body">
+                    <label for="file">Seleccionar Archivo Excel:</label>
+                    <input type="file" name="file" id="file" accept=".xlsx" class="form-control" required />
+                </div>
+
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</a>
+                    <a class="btn form-group row text-right">
+                        <button type="submit" class="btn btn-success btn-sm">Importar Excel</button>
+                    </a>
+                    <br>
+                </div>
+            </div>
+            </form>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#enviarDatosButton").click(function () {
+                var tableData = [];
+                $("#dataTable tbody tr").each(function (index, row) {
+                    var dataPrueba = {
+                        Id: $(row).find("td:eq(0)").text(),
+                        DNI: $(row).find("td:eq(1)").text(),
+                        PrimerNombre: $(row).find("td:eq(2)").text(),
+                        SegundoNombre: $(row).find("td:eq(3)").text(),
+                        PrimerApellido: $(row).find("td:eq(4)").text(),
+                        SegundoApellido: $(row).find("td:eq(5)").text(),
+                        FechaNacimiento: $(row).find("td:eq(6)").text(),
+                        Sexo: $(row).find("td:eq(7)").text(),
+                        TipoExamen: $(row).find("td:eq(8)").text(),
+                        FechaExamen: $(row).find("td:eq(9)").text(),
+                        Area: $(row).find("td:eq(10)").text(),
+                        PuestoDeTrabajo: $(row).find("td:eq(11)").text(),
+                        Aptitud: $(row).find("td:eq(12)").text(),
+                        Restricciones: $(row).find("td:eq(13)").text(),
+                        ID_EC: $(row).find("td:eq(14)").text(),
+                        ID_ERT: $(row).find("td:eq(15)").text(),
+                        ID_EP: $(row).find("td:eq(16)").text(),
+                        RUC: $(row).find("td:eq(17)").text(),
+                        Mes: $(row).find("td:eq(18)").text(),
+                        Anho: $(row).find("td:eq(19)").text()
+                    }
+                    tableData.push(dataPrueba);
+                });
+                  
+                $.ajax({
+                    url: "/InsertarEnBD/CargarDatosEnBD",
+                    type: "POST",
+                    data: {excelDataList: tableData}, //tableData,
+                    success: function (result) {
+                        console.log('------------------- tableData --------- ', tableData)
+                    },
+                    error: function (error) {
+                    }
+                });
+            });
+        });
+    </script>
+}
