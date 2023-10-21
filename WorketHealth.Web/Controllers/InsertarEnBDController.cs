@@ -69,59 +69,59 @@ namespace WorketHealth.Web.Controllers
                     // Listas para almacenar datos
                     List<SeguimientoMedico> SeguimientoMedicoDataList = new List<SeguimientoMedico>();
                     List<Seguimiento_EC> seguimiento_ecDataList = new List<Seguimiento_EC>();
-                 //
-                 //   foreach (var data in excelDataList)
-                 //   {
-                 //       var PersonalData = new Personal
-                 //       {
-                 //           Dni = data.DNI,
-                 //           Primer_Nombre = data.PrimerNombre,
-                 //           Segundo_Nombre = data.SegundoNombre,
-                 //           Primer_Apellido = data.PrimerApellido,
-                 //           Segundo_Apellido = data.SegundoApellido,
-                 //           //Fec_Nacimiento = (DateTime)data.FechaNacimiento,
-                 //           Fec_Nacimiento = data.FechaNacimiento != null ? (DateTime)data.FechaNacimiento : DateTime.MinValue,
-                 //           Sexo = data.Sexo
-                 //       };
-                 //
-                 //       //         // Crear una nueva entrada en la tabla SeguimientoMedico
-                 //       //         SeguimientoMedico SeguimientoMedicoData = new SeguimientoMedico
-                 //       //         {
-                 //       //             // Asigna las propiedades de SeguimientoMedico a partir de los datos en F_SEG_19
-                 //       //             // Por ejemplo: Nombre = data.Nombre
-                 //       //         };
-                 //       //
-                 //       //         // Divide los IDs separados por comas en data.ID_EC
-                 //       //         string[] idsEC = data.ID_EC.Split(',');
-                 //       //
-                 //       //         foreach (string idEC in idsEC)
-                 //       //         {
-                 //       //             if (int.TryParse(idEC, out int idECInt))
-                 //       //             {
-                 //       //                 // Crea una entrada en la tabla Seguimiento_EC que relaciona SeguimientoMedico y ID_ENFERMEDAD
-                 //       //                 Seguimiento_EC seguimiento_ecData = new Seguimiento_EC
-                 //       //                 {
-                 //       //                     SeguimientoMedico = SeguimientoMedicoData, // Relación con SeguimientoMedico
-                 //       //                     Id_Enfermedad = idECInt // ID de la enfermedad
-                 //       //                 };
-                 //       //
-                 //       //                 seguimiento_ecDataList.Add(seguimiento_ecData);
-                 //       //             }
-                 //       //         }
-                 //       //
-                 //       //         // Agrega la entrada de SeguimientoMedico a la lista
-                 //       //         SeguimientoMedicoDataList.Add(SeguimientoMedicoData);
-                 //
-                 //
-                 //
-                 //       _contexto.Personal.Add(PersonalData);
-                 //   }
+                 
+                    foreach (var data in excelDataList)
+                    {
+                        var PersonalData = new Personal
+                        {
+                            Dni = data.DNI,
+                            Primer_Nombre = data.PrimerNombre,
+                            Segundo_Nombre = data.SegundoNombre,
+                            Primer_Apellido = data.PrimerApellido,
+                            Segundo_Apellido = data.SegundoApellido,
+                            Fec_Nacimiento = (DateTime)data.FechaNacimiento,
+                            //Fec_Nacimiento = data.FechaNacimiento != null ? (DateTime)data.FechaNacimiento : DateTime.MinValue,
+                            Sexo = data.Sexo
+                        };
+                 
+                        //         // Crear una nueva entrada en la tabla SeguimientoMedico
+                        //         SeguimientoMedico SeguimientoMedicoData = new SeguimientoMedico
+                        //         {
+                        //             // Asigna las propiedades de SeguimientoMedico a partir de los datos en F_SEG_19
+                        //             // Por ejemplo: Nombre = data.Nombre
+                        //         };
+                        //
+                        //         // Divide los IDs separados por comas en data.ID_EC
+                        //         string[] idsEC = data.ID_EC.Split(',');
+                        //
+                        //         foreach (string idEC in idsEC)
+                        //         {
+                        //             if (int.TryParse(idEC, out int idECInt))
+                        //             {
+                        //                 // Crea una entrada en la tabla Seguimiento_EC que relaciona SeguimientoMedico y ID_ENFERMEDAD
+                        //                 Seguimiento_EC seguimiento_ecData = new Seguimiento_EC
+                        //                 {
+                        //                     SeguimientoMedico = SeguimientoMedicoData, // Relación con SeguimientoMedico
+                        //                     Id_Enfermedad = idECInt // ID de la enfermedad
+                        //                 };
+                        //
+                        //                 seguimiento_ecDataList.Add(seguimiento_ecData);
+                        //             }
+                        //         }
+                        //
+                        //         // Agrega la entrada de SeguimientoMedico a la lista
+                        //         SeguimientoMedicoDataList.Add(SeguimientoMedicoData);
+                 
+                 
+                 
+                        _contexto.Personal.Add(PersonalData);
+                    }
 
-           //         // Inserta los datos en SeguimientoMedico
-           //         _contexto.SeguimientoMedicos.AddRange(SeguimientoMedicoDataList);
+           //        // Inserta los datos en SeguimientoMedico
+           //        _contexto.SeguimientoMedicos.AddRange(SeguimientoMedicoDataList);
            //
-           //         // Inserta los datos en Seguimiento_EC
-           //         _contexto.Seguimiento_ECs.AddRange(seguimiento_ecDataList);
+           //        // Inserta los datos en Seguimiento_EC
+           //        _contexto.Seguimiento_ECs.AddRange(seguimiento_ecDataList);
 
                     _contexto.SaveChanges();
 

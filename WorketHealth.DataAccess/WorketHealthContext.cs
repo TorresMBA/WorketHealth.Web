@@ -15,8 +15,8 @@ namespace WorketHealth.DataAccess {
         }        
         public DbSet<Menu> Menus { get; set; }
         public DbSet<UserMenuAccess> UserMenuAccess { get; set; }
-        //public DbSet<Anho> Anho { get; set; }
-        //public DbSet<Personal> Personal { get; set; }
+        public DbSet<Anho> Anho { get; set; }
+        public DbSet<Personal> Personal { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -9,8 +9,8 @@ namespace WorketHealth.DataAccess.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Companies");
+            //migrationBuilder.DropTable(
+            //    name: "Companies");
 
             migrationBuilder.CreateTable(
                 name: "Menu",
@@ -78,23 +78,23 @@ namespace WorketHealth.DataAccess.Migrations
             migrationBuilder.DropTable(
                 name: "Menu");
 
-            migrationBuilder.CreateTable(
-                name: "Companies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Ruc = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Companies", x => x.Id);
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "Companies",
+            //    columns: table => new
+            //    {
+            //        Id = table.Column<int>(type: "int", nullable: false)
+            //            .Annotation("SqlServer:Identity", "1, 1"),
+            //        CreatedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //        CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+            //        ModifiedByUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //        ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+            //        RazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            //        Ruc = table.Column<string>(type: "nvarchar(max)", nullable: true)
+            //    },
+            //    constraints: table =>
+            //    {
+            //        table.PrimaryKey("PK_Companies", x => x.Id);
+            //    });
 
             
         }

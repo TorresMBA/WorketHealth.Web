@@ -155,72 +155,7 @@ namespace WorketHealth.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WorketHealth.DataAccess.Models.UserMenuAccess", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("MenuId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MenuId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserMenuAccess");
-                });
-
-            modelBuilder.Entity("WorketHealth.Domain.Entities.Menu", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Accion")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Controlador")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedByUser")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Id_Padre")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ModifiedByUser")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Nivel")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Menu");
-                });
-
-            modelBuilder.Entity("WorketHealth.Web.Models.AppUsuario", b =>
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.AppUsuario", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -285,6 +220,113 @@ namespace WorketHealth.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Fecha.Anho", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Year")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Anho");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Personal.Personal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Dni")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Fec_Nacimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Primer_Apellido")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Primer_Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Segundo_Apellido")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Segundo_Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sexo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Personal");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.UserMenuAccess", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("MenuId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "MenuId");
+
+                    b.HasIndex("MenuId");
+
+                    b.ToTable("UserMenuAccess");
+                });
+
+            modelBuilder.Entity("WorketHealth.Domain.Entities.Menu", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Accion")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Controlador")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedByUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Id_Padre")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedByUser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Nivel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Menus");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -296,7 +338,7 @@ namespace WorketHealth.DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("WorketHealth.Web.Models.AppUsuario", null)
+                    b.HasOne("WorketHealth.DataAccess.Models.AppUsuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -305,7 +347,7 @@ namespace WorketHealth.DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("WorketHealth.Web.Models.AppUsuario", null)
+                    b.HasOne("WorketHealth.DataAccess.Models.AppUsuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -320,7 +362,7 @@ namespace WorketHealth.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WorketHealth.Web.Models.AppUsuario", null)
+                    b.HasOne("WorketHealth.DataAccess.Models.AppUsuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -329,7 +371,7 @@ namespace WorketHealth.DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("WorketHealth.Web.Models.AppUsuario", null)
+                    b.HasOne("WorketHealth.DataAccess.Models.AppUsuario", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -344,7 +386,7 @@ namespace WorketHealth.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WorketHealth.Web.Models.AppUsuario", "User")
+                    b.HasOne("WorketHealth.DataAccess.Models.AppUsuario", "User")
                         .WithMany("UserMenuAccess")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -355,12 +397,12 @@ namespace WorketHealth.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WorketHealth.Domain.Entities.Menu", b =>
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.AppUsuario", b =>
                 {
                     b.Navigation("UserMenuAccess");
                 });
 
-            modelBuilder.Entity("WorketHealth.Web.Models.AppUsuario", b =>
+            modelBuilder.Entity("WorketHealth.Domain.Entities.Menu", b =>
                 {
                     b.Navigation("UserMenuAccess");
                 });

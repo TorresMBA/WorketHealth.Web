@@ -36,6 +36,7 @@ namespace WorketHealth.Web.Controllers
                 .Select(a => new SelectListItem { Value = a.Year, Text = a.Year })
                     .ToList();
 
+
             Models.ProyectoViewModel registroVM = new Models.ProyectoViewModel()
             {
                 ListaMes = listaMes,
