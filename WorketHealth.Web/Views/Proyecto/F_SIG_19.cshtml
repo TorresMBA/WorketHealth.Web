@@ -30,7 +30,7 @@
                                     <i class="fas fa-file-excel"></i> Importar Excel
                                     </button>
                                 </a>
-                                <a href="#" >
+                                <a href="" >
                                     <button id="enviarDatosButton" type="submit" class=" btn btn-danger btn-sm">
                                             <i class="fas fa-database"></i> Insertar en BD
                                      </button>
@@ -169,13 +169,13 @@
                     }
                     tableData.push(dataPrueba);
                 });
-                  
+
                 $.ajax({
                     url: "/InsertarEnBD/CargarDatosEnBD",
                     type: "POST",
-                    data: {excelDataList: tableData}, //tableData,
+                    data: { excelDataList: tableData },
                     success: function (result) {
-                        console.log('------------------- tableData --------- ', tableData)
+                        window.location.href = '/ImportarData/Index';
                     },
                     error: function (error) {
                     }

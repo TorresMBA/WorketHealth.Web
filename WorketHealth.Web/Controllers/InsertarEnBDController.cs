@@ -19,48 +19,7 @@ namespace WorketHealth.Web.Controllers
         [HttpPost]
         public IActionResult CargarDatosEnBD(List<F_SEG_19> excelDataList)
         {
-            //if (excelDataList != null && excelDataList.Count > 0)
-            //{
-            //    try
-            //    {
-            //       // foreach (var data in excelDataList)
-            //       // {
-            //       //     // Realiza el mapeo de propiedades comunes a ambas tablas
-            //       //     var tabla1Data = new Tabla1
-            //       //     {
-            //       //         ColumnaComun = data.ColumnaComun,
-            //       //         ColumnaEspecificaTabla1 = data.ColumnaTabla1
-            //       //     };
-            //       //
-            //       //     var tabla2Data = new Tabla2
-            //       //     {
-            //       //         ColumnaComun = data.ColumnaComun,
-            //       //         ColumnaEspecificaTabla2 = data.ColumnaTabla2
-            //       //     };
-            //       //
-            //       //     // Inserta en Tabla1
-            //       //     _contexto.Tabla1.Add(tabla1Data);
-            //       //
-            //       //     // Inserta en Tabla2
-            //       //     _contexto.Tabla2.Add(tabla2Data);
-            //       // }
-            //
-            //        _contexto.SaveChanges();
-            //
-            //        ViewBag.Message = "Datos insertados en la base de datos correctamente.";
-            //
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        ViewBag.Error = "Error al insertar en la base de datos: " + ex.Message;
-            //    }
-            //}
-            //else
-            //{
-            //    ViewBag.Error = "No hay datos para insertar en la base de datos.";
-            //}
 
-            // Redirige a la vista principal o a donde desees.
 
             if (excelDataList != null && excelDataList.Count > 0)
             {
@@ -68,64 +27,163 @@ namespace WorketHealth.Web.Controllers
                 {
                     // Listas para almacenar datos
                     List<SeguimientoMedico> SeguimientoMedicoDataList = new List<SeguimientoMedico>();
-                    List<Seguimiento_EC> seguimiento_ecDataList = new List<Seguimiento_EC>();
-                 
+                    List<SeguimientoEnfermedad> seguimiento_ecDataList = new List<SeguimientoEnfermedad>();
+
+
+                    var dniRepetidos = 0;
                     foreach (var data in excelDataList)
                     {
-                        var PersonalData = new Personal
+
+                        // Verifica si la persona ya existe en la tabla "Personal" por su DNI
+                        var personaExistente = _contexto.Personal.FirstOrDefault(p => p.Dni == data.DNI.Trim());
+
+                        if (personaExistente == null) //(!DniExists(data.DNI))
                         {
-                            Dni = data.DNI,
-                            Primer_Nombre = data.PrimerNombre,
-                            Segundo_Nombre = data.SegundoNombre,
-                            Primer_Apellido = data.PrimerApellido,
-                            Segundo_Apellido = data.SegundoApellido,
-                            Fec_Nacimiento = (DateTime)data.FechaNacimiento,
-                            //Fec_Nacimiento = data.FechaNacimiento != null ? (DateTime)data.FechaNacimiento : DateTime.MinValue,
-                            Sexo = data.Sexo
-                        };
-                 
-                        //         // Crear una nueva entrada en la tabla SeguimientoMedico
-                        //         SeguimientoMedico SeguimientoMedicoData = new SeguimientoMedico
-                        //         {
-                        //             // Asigna las propiedades de SeguimientoMedico a partir de los datos en F_SEG_19
-                        //             // Por ejemplo: Nombre = data.Nombre
-                        //         };
-                        //
-                        //         // Divide los IDs separados por comas en data.ID_EC
-                        //         string[] idsEC = data.ID_EC.Split(',');
-                        //
-                        //         foreach (string idEC in idsEC)
-                        //         {
-                        //             if (int.TryParse(idEC, out int idECInt))
-                        //             {
-                        //                 // Crea una entrada en la tabla Seguimiento_EC que relaciona SeguimientoMedico y ID_ENFERMEDAD
-                        //                 Seguimiento_EC seguimiento_ecData = new Seguimiento_EC
-                        //                 {
-                        //                     SeguimientoMedico = SeguimientoMedicoData, // Relación con SeguimientoMedico
-                        //                     Id_Enfermedad = idECInt // ID de la enfermedad
-                        //                 };
-                        //
-                        //                 seguimiento_ecDataList.Add(seguimiento_ecData);
-                        //             }
-                        //         }
-                        //
-                        //         // Agrega la entrada de SeguimientoMedico a la lista
-                        //         SeguimientoMedicoDataList.Add(SeguimientoMedicoData);
-                 
-                 
-                 
-                        _contexto.Personal.Add(PersonalData);
-                    }
+                            // La persona no existe, crea un nuevo registro en "Personal"
+                            var nuevaPersona = new Personal
+                            {
+                                Dni = data.DNI.Trim(),
+                                Primer_Nombre = data.PrimerNombre.Trim(),
+                                Segundo_Nombre = data.SegundoNombre,
+                                Primer_Apellido = data.PrimerApellido,
+                                Segundo_Apellido = data.SegundoApellido,
+                                Fec_Nacimiento = (DateTime)data.FechaNacimiento,
+                                Sexo = data.Sexo.Trim()
+                            };
 
-           //        // Inserta los datos en SeguimientoMedico
-           //        _contexto.SeguimientoMedicos.AddRange(SeguimientoMedicoDataList);
-           //
-           //        // Inserta los datos en Seguimiento_EC
-           //        _contexto.Seguimiento_ECs.AddRange(seguimiento_ecDataList);
-
-                    _contexto.SaveChanges();
-
+                            _contexto.Personal.Add(nuevaPersona);
+                        }
+                        else
+                        {
+                            // La persona ya existe en "Personal".
+                            dniRepetidos++;
+                            TempData["Error"] = "Se encontraron " + dniRepetidos + " DNI repetidos.";
+                        }
+                                                
+                    
+                        // Busca el registro en la tabla TipoExamen donde el COD coincida con el código del Excel
+                        var tipoExamen = _contexto.TipoExamenes.FirstOrDefault(te => te.COD == data.TipoExamen.Trim());
+                    
+                        if (tipoExamen == null)
+                        {
+                            // Si no se encontró un registro con el código proporcionado, intenta buscar con "OTRO"
+                            tipoExamen = _contexto.TipoExamenes.FirstOrDefault(te => te.COD == "OTRO");
+                        }
+                        int idTipoExamen = tipoExamen.ID_TIPO;
+                    
+                        // Intenta buscar el registro en la tabla Aptitud donde la descripción coincida con el valor del Excel
+                        var aptitud = _contexto.Aptitudes.FirstOrDefault(a => a.DESCRIPCION == data.Aptitud.Trim());
+                    
+                        if (aptitud == null)
+                        {
+                            // Si no se encontró una aptitud con la descripción proporcionada, intenta buscar con "OTRO"
+                            aptitud = _contexto.Aptitudes.FirstOrDefault(a => a.DESCRIPCION == "OTRO");
+                        }
+                    
+                            // Se encontró una Aptitud, obtén su ID_APTITUD
+                               int idAptitud = aptitud.ID_APTITUD;
+                  
+                           // Ahora puedes agregar el registro de "SeguimientoMedico"
+                           var seguimientoMedico = new SeguimientoMedico
+                           {
+                               DNI = data.DNI,
+                               ID_TIPO_EXAMEN = idTipoExamen,
+                               FECHA_EXAM = (DateTime)data.FechaExamen,
+                               AREA = data.Area,
+                               PUESTO_DE_TRABAJO = data.PuestoDeTrabajo,
+                               ID_SEG_APT = idAptitud,
+                               RESTRICIONES = data.Restricciones,
+                               RUC = data.RUC,
+                               MES = data.Mes,
+                               ANHO = data.Anho
+                           };
+                        //------------------------------------------------------------------------
+                        seguimientoMedico.Enfermedades = new List<SeguimientoEnfermedad>();
+         
+                        // Dividir el campo ID_EC en códigos separados por comas
+                        var codigosEC = data.ID_EC?.Split(',').Select(code => code.Trim());
+         
+                        if (codigosEC != null)
+                        {
+                            foreach (var codigoEC in codigosEC)
+                            {
+                                // Busca el código en la tabla "EnfermedadComun"
+                                var ec = _contexto.EnfermedadesComunes.FirstOrDefault(ec => ec.COD == codigoEC);
+         
+                                if (ec != null)
+                                {
+                                    var seguimientoEnfermedad = new SeguimientoEnfermedad
+                                    {
+                                        EnfermedadComun = ec
+                                    };
+         
+                                    seguimientoMedico.Enfermedades.Add(seguimientoEnfermedad);
+                                }
+                            }
+                        }
+                        
+                        //_contexto.SeguimientoMedicos.Add(seguimientoMedico);
+         
+                        //--------------------------------------------------------------------------
+         
+                        seguimientoMedico.EnfermedadesTrabajo = new List<SeguimientoEnfermedadTrabajo>();
+         
+                        // Dividir el campo ID_ERT en códigos separados por comas
+                        var codigosERT = (data.ID_ERT ?? "").Split(',').Select(code => code.Trim());
+         
+                        //if (codigosERT != null)
+                        //{
+                        foreach (var codigoERT in codigosERT)
+                            {
+                                // Busca el código en la tabla "EnfermedadComun"
+                                var ert = _contexto.EnfermedadesRelacionadasTrabajo.FirstOrDefault(ert => ert.COD == codigoERT);
+         
+                                if (ert != null)
+                                {
+                                    var seguimientoEnfermedadTrabajo = new SeguimientoEnfermedadTrabajo
+                                    {
+                                        EnfermedadRelacionadaTrabajo = ert
+                                    };
+         
+                                    seguimientoMedico.EnfermedadesTrabajo.Add(seguimientoEnfermedadTrabajo);
+                                }
+                            }
+                        //}
+         
+                        //--------------------------------------------------------------------------
+         
+                        seguimientoMedico.EnfermedadesProfesionales = new List<SeguimientoEnfermedadProfesional>();
+         
+                        // Dividir el campo ID_EP en códigos separados por comas
+                        var codigosEP = (data.ID_EP ?? "").Split(',').Select(code => code.Trim());
+                        //if (codigosEP != null)
+                        //{
+                            foreach (var codigoEP in codigosEP)
+                            {
+                                // Busca el código en la tabla "EnfermedadComun"
+                                var ep = _contexto.EnfermedadesProfesionales.FirstOrDefault(ep => ep.COD == codigoEP);
+         
+                                if (ep != null)
+                                {
+                                    var seguimientoEnfermedadProfesional = new SeguimientoEnfermedadProfesional
+                                    {
+                                        EnfermedadProfesional = ep
+                                    };
+         
+                                    seguimientoMedico.EnfermedadesProfesionales.Add(seguimientoEnfermedadProfesional);
+                                }
+                            }
+                        //}
+         
+                        _contexto.SeguimientoMedicos.Add(seguimientoMedico);
+         
+                  }
+        
+        
+                  _contexto.SaveChanges();
+        
                     TempData["Correcto"] = "Datos insertados en la base de datos correctamente.";
+                    return RedirectToAction("Index", "ImportarData");
                 }
                 catch (Exception ex)
                 {
@@ -140,5 +198,10 @@ namespace WorketHealth.Web.Controllers
             // Redirige a la vista principal o a donde desees.
             return RedirectToAction("F_SIG_19", "Proyecto");
         }
+       // private bool DniExists(string dni)
+       // {
+       //     return _contexto.Personal.Any(p => p.Dni == dni);
+       // }
     }
+
 }

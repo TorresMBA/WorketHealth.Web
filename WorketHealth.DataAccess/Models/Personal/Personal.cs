@@ -10,7 +10,6 @@ namespace WorketHealth.DataAccess.Models.Personal
 {
     public class Personal
     {
-        [Key]
         public int Id { get; set; }
         public string Dni { get; set; }
         public string? Primer_Nombre { get; set; }

@@ -6,35 +6,21 @@ namespace WorketHealth.DataAccess.Models.Registros
     public class SeguimientoMedico
     {
         [Key]
-        [NotMapped]
-        public int Id_Seg { get; set; }
-        [NotMapped]
+        public int ID_SEG { get; set; }
         public string DNI { get; set; }
-        [NotMapped]
-        public string? Id_Tipo_Examen { get; set; }
-        [NotMapped]
-        public DateTime? Fecha_Exam { get; set; }
-        [NotMapped]
-        public string? Area { get; set; }
-        [NotMapped]
-        public string? Puesto_Trabajo { get; set; }
-        [NotMapped]
-        public int? Id_Seg_Apt { get; set; }
-        [NotMapped]
-        public string? Restrinccion { get; set; }
-        [NotMapped]
-        public int? Id_EC { get; set; }
-        [NotMapped]
-        public int? Id_ERT { get; set; }
-        [NotMapped]
-        public int? Id_EP { get; set; }
-        [NotMapped]
-        public string? Ruc { get; set; }
-        [NotMapped]
-        public string? Mes { get; set; }
-        [NotMapped]
-        public string? Anho { get; set; }
-        [NotMapped]
-        public ICollection<Seguimiento_EC>? Seguimiento_EC { get; set; } // Relación muchos a muchos con la tabla EnfermedadesComunes
+        public int ID_TIPO_EXAMEN { get; set; }
+        public TipoExamen TipoExamen { get; set; }
+        public DateTime FECHA_EXAM { get; set; }
+        public string? AREA { get; set; }
+        public string? PUESTO_DE_TRABAJO { get; set; }
+        public int ID_SEG_APT { get; set; }
+        public Aptitud Aptitud { get; set; }
+        public string? RESTRICIONES { get; set; }
+        public string RUC { get; set; }
+        public string MES { get; set; }
+        public string ANHO { get; set; }
+        public ICollection<SeguimientoEnfermedad>? Enfermedades { get; set; } // Relación muchos a muchos con la tabla EnfermedadesComunes
+        public ICollection<SeguimientoEnfermedadTrabajo>? EnfermedadesTrabajo { get; set; } // Relación muchos a muchos con la tabla EnfermedadesRelacionadaTrabajo
+        public ICollection<SeguimientoEnfermedadProfesional>? EnfermedadesProfesionales { get; set; } // Relación muchos a muchos con la tabla EnfermedadProfecional
     }
 }

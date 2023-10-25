@@ -73,13 +73,23 @@ namespace WorketHealth.Web.Controllers
             List<SelectListItem> listaRoles = new List<SelectListItem>();
             listaRoles.Add(new SelectListItem()
             {
-                Value = "Registrado",
-                Text = "Registrado"
+                Value = "Administrador",
+                Text = "Administrador"
             });
             listaRoles.Add(new SelectListItem()
             {
-                Value = "Administrador",
-                Text = "Administrador"
+                Value = "Desarrollador",
+                Text = "Desarrollador"
+            });
+            listaRoles.Add(new SelectListItem()
+            {
+                Value = "Visitante",
+                Text = "Visitante"
+            });
+            listaRoles.Add(new SelectListItem()
+            {
+                Value = "Registrado",
+                Text = "Registrado"
             });
 
             Models.RegistroViewModel registroVM = new Models.RegistroViewModel()
@@ -125,13 +135,23 @@ namespace WorketHealth.Web.Controllers
             List<SelectListItem> listaRoles = new List<SelectListItem>();
             listaRoles.Add(new SelectListItem()
             {
-                Value = "Registrado",
-                Text = "Registrado"
+                Value = "Administrador",
+                Text = "Administrador"
             });
             listaRoles.Add(new SelectListItem()
             {
-                Value = "Administrador",
-                Text = "Administrador"
+                Value = "Desarrollador",
+                Text = "Desarrollador"
+            });
+            listaRoles.Add(new SelectListItem()
+            {
+                Value = "Visitante",
+                Text = "Visitante"
+            });
+            listaRoles.Add(new SelectListItem()
+            {
+                Value = "Registrado",
+                Text = "Registrado"
             });
 
             Models.RegistroViewModel registroVM = new Models.RegistroViewModel()

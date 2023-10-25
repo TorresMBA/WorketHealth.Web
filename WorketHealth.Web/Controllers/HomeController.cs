@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using WorketHealth.DataAccess;
 using WorketHealth.DataAccess.Models;
 using WorketHealth.Services.Services.Empresa;
 
@@ -40,14 +41,54 @@ namespace WorketHealth.Web.Controllers {
             {
                 //Creacion de rol administrador
                 await _roleManager.CreateAsync(new IdentityRole("Administrador"));
+
+
+                //Creacion de Usuarios
+                await CreateUserAndAssignRole(_userManager, "Administrador", "Administrador@example.com", "Qwer@123?", "Administrador");
+                await CreateUserAndAssignRole(_userManager, "Desarrollador1", "Desarrollador1@example.com", "Qwer@123?", "Administrador");
+                await CreateUserAndAssignRole(_userManager, "Desarrollador2", "Desarrollador2@example.com", "Qwer@123?", "Administrador");
+
+
+            }
+            if (!await _roleManager.RoleExistsAsync("Desarrollador"))
+            {
+                //Creacion de rol administrador
+                await _roleManager.CreateAsync(new IdentityRole("Desarrollador"));
+            }
+            if (!await _roleManager.RoleExistsAsync("Visitante"))
+            {
+                //Creacion de rol administrador
+                await _roleManager.CreateAsync(new IdentityRole("Visitante"));
             }
             if (!await _roleManager.RoleExistsAsync("Registrado"))
             {
                 //Creacion de rol usuario registrado
                 await _roleManager.CreateAsync(new IdentityRole("Registrado"));
             }
+
             return View();
         }
+        private async Task CreateUserAndAssignRole(UserManager<AppUsuario> userManager, string username, string email, string password, string roleName)
+        {
+            if (userManager.FindByNameAsync(username).Result == null)
+            {
+                // Crear usuario
+                var user = new AppUsuario
+                {
+                    UserName = username.Replace(" ", ""),
+                    Email = email
+                };
+
+                var result = await _userManager.CreateAsync(user, password);
+
+                if (result.Succeeded)
+                {
+                    // Asignar el rol al usuario
+                    await _userManager.AddToRoleAsync(user, roleName);
+                }
+            }
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -74,11 +74,20 @@ using(var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<WorketHealthContext>();
-        await context.Database.MigrateAsync();
+        //await context.Database.MigrateAsync();   //se pueso en nota para probar el DbInitializer (ingresa datos iniciales a las tablas al primer uso)
+        context.Database.Migrate(); // Aplicar migraciones
+        // Llama al DbInitializer para agregar datos iniciales (si es necesario)
+        // var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        //  WorketHealthInitializer.Initialize(context);
+
+        // Llama al método Initialize directamente en la clase estática
+        WorketHealthInitializer.Initialize(context);
+
     } catch(Exception ex)
     {
         var logger = loggerFactory.CreateLogger<Program>();
-        logger.LogError(ex, "Ocurrio un error durante la migraci�n");
+        logger.LogError(ex, "Ocurrió un error durante la migración o inicialización de la base de datos");
     }
 }
 #endregion

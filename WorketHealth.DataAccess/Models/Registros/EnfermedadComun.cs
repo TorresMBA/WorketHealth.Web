@@ -6,11 +6,10 @@ namespace WorketHealth.DataAccess.Models.Registros
     public class EnfermedadComun
     {
         [Key]
-        [NotMapped]
-        public int Id_Enfermedad { get; set; }
-        [NotMapped]
-        public string? Cod { get; set; }
-        [NotMapped]
-        public string? Descripcion { get; set; }
+        public int ID_ENFERMEDAD { get; set; }
+        public string? COD { get; set; }
+        public string? DESCRIPCION { get; set; }
+
+        public ICollection<SeguimientoEnfermedad>? SeguimientoMedicos { get; set; }
     }
 }

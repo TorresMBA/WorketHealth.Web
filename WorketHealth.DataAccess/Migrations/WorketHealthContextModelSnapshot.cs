@@ -271,6 +271,201 @@ namespace WorketHealth.DataAccess.Migrations
                     b.ToTable("Personal");
                 });
 
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.Aptitud", b =>
+                {
+                    b.Property<int>("ID_APTITUD")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_APTITUD"), 1L, 1);
+
+                    b.Property<string>("COD")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DESCRIPCION")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID_APTITUD");
+
+                    b.ToTable("Aptitudes");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.EnfermedadComun", b =>
+                {
+                    b.Property<int>("ID_ENFERMEDAD")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_ENFERMEDAD"), 1L, 1);
+
+                    b.Property<string>("COD")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DESCRIPCION")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID_ENFERMEDAD");
+
+                    b.ToTable("EnfermedadesComunes");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.EnfermedadProfesional", b =>
+                {
+                    b.Property<int>("ID_ENFERMEDAD")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_ENFERMEDAD"), 1L, 1);
+
+                    b.Property<string>("COD")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DESCRIPCION")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID_ENFERMEDAD");
+
+                    b.ToTable("EnfermedadesProfesionales");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.EnfermedadRelacionadaTrabajo", b =>
+                {
+                    b.Property<int>("ID_ENFERMEDAD")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_ENFERMEDAD"), 1L, 1);
+
+                    b.Property<string>("COD")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DESCRIPCION")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID_ENFERMEDAD");
+
+                    b.ToTable("EnfermedadesRelacionadasTrabajo");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.SeguimientoEnfermedad", b =>
+                {
+                    b.Property<int>("SeguimientoMedicoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EnfermedadComunId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeguimientoMedicoId", "EnfermedadComunId");
+
+                    b.HasIndex("EnfermedadComunId");
+
+                    b.ToTable("SeguimientoEnfermedad");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.SeguimientoEnfermedadProfesional", b =>
+                {
+                    b.Property<int>("SeguimientoMedicoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EnfermedadProfesionalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeguimientoMedicoId", "EnfermedadProfesionalId");
+
+                    b.HasIndex("EnfermedadProfesionalId");
+
+                    b.ToTable("SeguimientoEnfermedadProfesional");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.SeguimientoEnfermedadTrabajo", b =>
+                {
+                    b.Property<int>("SeguimientoMedicoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EnfermedadRelacionadaTrabajoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeguimientoMedicoId", "EnfermedadRelacionadaTrabajoId");
+
+                    b.HasIndex("EnfermedadRelacionadaTrabajoId");
+
+                    b.ToTable("SeguimientoEnfermedadTrabajo");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.SeguimientoMedico", b =>
+                {
+                    b.Property<int>("ID_SEG")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_SEG"), 1L, 1);
+
+                    b.Property<string>("ANHO")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AREA")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DNI")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FECHA_EXAM")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ID_SEG_APT")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ID_TIPO_EXAMEN")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MES")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PUESTO_DE_TRABAJO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RESTRICIONES")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RUC")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID_SEG");
+
+                    b.HasIndex("ID_SEG_APT");
+
+                    b.HasIndex("ID_TIPO_EXAMEN");
+
+                    b.ToTable("SeguimientoMedicos");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.TipoExamen", b =>
+                {
+                    b.Property<int>("ID_TIPO")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_TIPO"), 1L, 1);
+
+                    b.Property<string>("COD")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DESCRIPCION")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID_TIPO");
+
+                    b.ToTable("TipoExamenes");
+                });
+
             modelBuilder.Entity("WorketHealth.DataAccess.Models.UserMenuAccess", b =>
                 {
                     b.Property<string>("UserId")
@@ -378,6 +573,82 @@ namespace WorketHealth.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.SeguimientoEnfermedad", b =>
+                {
+                    b.HasOne("WorketHealth.DataAccess.Models.Registros.EnfermedadComun", "EnfermedadComun")
+                        .WithMany("SeguimientoMedicos")
+                        .HasForeignKey("EnfermedadComunId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorketHealth.DataAccess.Models.Registros.SeguimientoMedico", "SeguimientoMedico")
+                        .WithMany("Enfermedades")
+                        .HasForeignKey("SeguimientoMedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EnfermedadComun");
+
+                    b.Navigation("SeguimientoMedico");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.SeguimientoEnfermedadProfesional", b =>
+                {
+                    b.HasOne("WorketHealth.DataAccess.Models.Registros.EnfermedadProfesional", "EnfermedadProfesional")
+                        .WithMany("SeguimientoMedicos")
+                        .HasForeignKey("EnfermedadProfesionalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorketHealth.DataAccess.Models.Registros.SeguimientoMedico", "SeguimientoMedico")
+                        .WithMany("EnfermedadesProfesionales")
+                        .HasForeignKey("SeguimientoMedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EnfermedadProfesional");
+
+                    b.Navigation("SeguimientoMedico");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.SeguimientoEnfermedadTrabajo", b =>
+                {
+                    b.HasOne("WorketHealth.DataAccess.Models.Registros.EnfermedadRelacionadaTrabajo", "EnfermedadRelacionadaTrabajo")
+                        .WithMany("SeguimientoMedicos")
+                        .HasForeignKey("EnfermedadRelacionadaTrabajoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorketHealth.DataAccess.Models.Registros.SeguimientoMedico", "SeguimientoMedico")
+                        .WithMany("EnfermedadesTrabajo")
+                        .HasForeignKey("SeguimientoMedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EnfermedadRelacionadaTrabajo");
+
+                    b.Navigation("SeguimientoMedico");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.SeguimientoMedico", b =>
+                {
+                    b.HasOne("WorketHealth.DataAccess.Models.Registros.Aptitud", "Aptitud")
+                        .WithMany()
+                        .HasForeignKey("ID_SEG_APT")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WorketHealth.DataAccess.Models.Registros.TipoExamen", "TipoExamen")
+                        .WithMany()
+                        .HasForeignKey("ID_TIPO_EXAMEN")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Aptitud");
+
+                    b.Navigation("TipoExamen");
+                });
+
             modelBuilder.Entity("WorketHealth.DataAccess.Models.UserMenuAccess", b =>
                 {
                     b.HasOne("WorketHealth.Domain.Entities.Menu", "Menu")
@@ -400,6 +671,30 @@ namespace WorketHealth.DataAccess.Migrations
             modelBuilder.Entity("WorketHealth.DataAccess.Models.AppUsuario", b =>
                 {
                     b.Navigation("UserMenuAccess");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.EnfermedadComun", b =>
+                {
+                    b.Navigation("SeguimientoMedicos");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.EnfermedadProfesional", b =>
+                {
+                    b.Navigation("SeguimientoMedicos");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.EnfermedadRelacionadaTrabajo", b =>
+                {
+                    b.Navigation("SeguimientoMedicos");
+                });
+
+            modelBuilder.Entity("WorketHealth.DataAccess.Models.Registros.SeguimientoMedico", b =>
+                {
+                    b.Navigation("Enfermedades");
+
+                    b.Navigation("EnfermedadesProfesionales");
+
+                    b.Navigation("EnfermedadesTrabajo");
                 });
 
             modelBuilder.Entity("WorketHealth.Domain.Entities.Menu", b =>

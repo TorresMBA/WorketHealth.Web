@@ -8,10 +8,10 @@
         public string? SegundoNombre { get; set; }
         public string? PrimerApellido { get; set; }
         public string? SegundoApellido { get; set; }
-        public DateTime? FechaNacimiento { get; set; }
+        public DateTime FechaNacimiento { get; set; }
         public string? Sexo { get; set; }
         public string? TipoExamen { get; set; }
-        public DateTime? FechaExamen { get; set; }
+        public DateTime FechaExamen { get; set; }
         public string? Area { get; set; }
         public string? PuestoDeTrabajo { get; set; }
         public string? Aptitud { get; set; }
