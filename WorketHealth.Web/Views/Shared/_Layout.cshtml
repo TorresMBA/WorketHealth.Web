@@ -18,11 +18,13 @@
     <link href="~/assets/vendor/fonts/circular-std/style.css" rel="stylesheet" asp-append-version="true">
     <link rel="stylesheet" href="~/assets/libs/css/style.css" asp-append-version="true">
     <link rel="stylesheet" href="~/assets/vendor/fonts/fontawesome/css/fontawesome-all.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/vendor/charts/chartist-bundle/chartist.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/vendor/charts/morris-bundle/morris.css" asp-append-version="true">
+    @*<link rel="stylesheet" href="~/assets/vendor/charts/chartist-bundle/chartist.css" asp-append-version="true">*@
+    @*<link rel="stylesheet" href="~/assets/vendor/charts/morris-bundle/morris.css" asp-append-version="true">*@
     <link rel="stylesheet" href="~/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/vendor/charts/c3charts/c3.css" asp-append-version="true">
+    @*<link rel="stylesheet" href="~/assets/vendor/charts/c3charts/c3.css" asp-append-version="true">*@
     <link rel="stylesheet" href="~/assets/vendor/fonts/flag-icon-css/flag-icon.min.css" asp-append-version="true">
+
+    @*<link rel="stylesheet" href="~/css/site.css asp-append-version="true">*@
 
     <!-- tablas - Administrador de roles-->
     <link rel="stylesheet"  href="~/assets/vendor/datatables/css/dataTables.bootstrap4.css" asp-append-version="true">
@@ -228,6 +230,12 @@
                                         <li class="nav-item">
                                             <a class="nav-link" asp-area="" asp-controller="ImportarData" asp-action="Index">Importar Datos <span class="badge badge-secondary ml-1">New</span></a>
                                         </li>
+                                        @if (User.IsInRole("Desarrollador"))
+                                        {
+                                            <li class="nav-item">
+                                                <a class="nav-link" asp-area="" asp-controller="ImportarDataTabla" asp-action="Index"> Inportar Tablas en BD <span class="badge badge-success ml-1">New</span></a>
+                                            </li>
+                                        }
                                         @*<li class="nav-item">
                                             <a class="nav-link" href="pages/general.html">General</a>
                                         </li>
@@ -331,7 +339,7 @@
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-fw fa-user"></i>Usuarios</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
-                                        @if (User.IsInRole("Administrador"))
+                                        @if (User.IsInRole("Administrador") || User.IsInRole("Desarrollador"))
                                         {
                                             <li class="nav-item">
                                                 <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index"> Gestión de Usuarios y Roles @*<span class="badge badge-success ml-1">New</span>*@</a>
@@ -352,7 +360,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="EditarPerfil" asp-route-id="@_UserManager.GetUserId(User)">Gestión de Perfil</a>
                                         </li>
-                                        @if (User.IsInRole("Administrador"))
+                                        @if (User.IsInRole("Administrador") || User.IsInRole("Desarrollador"))
                                         {
                                             string n1 = "Cuentas";
 
@@ -547,9 +555,13 @@
     <!-- main js -->
     <script src="~/assets/vendor/charts/c3charts/c3.min.js"></script>
     <script src="~/assets/vendor/charts/c3charts/d3-5.4.0.min.js"></script>
-    <script src="~/assets/vendor/charts/c3charts/C3chartjs.js"></script>
-    <script src="~/assets/libs/js/main-js.js"></script>
+    @*<script src="~/assets/vendor/charts/c3charts/C3chartjs.js"></script>*@
+    @*<script src="~/assets/libs/js/main-js.js"></script>*@
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.3/chart.min.js" integrity="sha512-fMPPLjF/Xr7Ga0679WgtqoSyfUoQgdt8IIxJymStR5zV3Fyb6B3u/8DcaZ6R6sXexk5Z64bCgo2TYyn760EdcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js" integrity="sha512-7U4rRB8aGAHGVad3u2jiC7GA5/1YhQcQjxKeaVms/bT66i3LVBMRcBI9KwABNWnxOSwulkuSXxZLGuyfvo7V1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
     
-   @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorketHealth.DataAccess;
 
@@ -11,9 +12,10 @@ using WorketHealth.DataAccess;
 namespace WorketHealth.DataAccess.Migrations
 {
     [DbContext(typeof(WorketHealthContext))]
-    partial class WorketHealthContextModelSnapshot : ModelSnapshot
+    [Migration("20231115230649_MigrationAddRuc")]
+    partial class MigrationAddRuc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

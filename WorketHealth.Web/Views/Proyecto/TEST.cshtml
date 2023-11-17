@@ -1,0 +1,114 @@
+﻿@model List<TEST>
+@{
+    ViewData["Title"] = "Importar Excel";
+}
+<div class="container-fluid dashboard-content">
+    @if (TempData["Correcto"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Correcto"]
+            <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+        </div>
+    }
+    <!-- Agrega los botones y el formulario para enviar los datos al controlador -->
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <form asp-action="CargarDatosEnBDTEST" asp-controller="InsertarEnBD" method="post">
+            <div class="card">
+                <div class="card-header d-flex">
+                    <h5 class="card-header-title">TEST.</h5>
+                    <div class="toolbar ml-auto">
+                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
+                            <i class="fas fa-file-excel"></i> Elegir Excel
+                        </button>
+                        <button type="submit" class="btn btn-danger btn-sm">
+                           <i class="fas fa-database"></i> Insertar en BD
+                        </button>
+                        @*<form asp-action="CargarDatosEnBDTEST" asp-controller="InsertarEnBD" method="post">
+                            @if (Model != null && Model.Count > 0)
+{
+                            @for (var i = 0; i < Model.Count; i++)
+                            {
+                                <input asp-for="@Model[i].DNI"  type="hidden" />
+                                <input asp-for="@Model[i].NOMBRE"  type="hidden" />
+                                <input asp-for="@Model[i].AÑO"  type="hidden" />
+                            }
+}
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-database"></i> Insertar en BD
+                            </button>
+                        </form>*@
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">DNI</th>
+                                    <th scope="col">NOMBRE</th>
+                                    <th scope="col">AÑO</th>
+                                    <!-- Define las demás columnas aquí -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    @for (var i = 0; i < Model.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>@(i + 1)</td>
+                                                <td>@Model[i].DNI  <input asp-for="@Model[i].DNI" type="hidden" /> </td>
+                                                <td>@Model[i].NOMBRE <input asp-for="@Model[i].NOMBRE" type="hidden" /></td>
+                                                <td>@Model[i].AÑO <input asp-for="@Model[i].AÑO" type="hidden" /></td>
+                                            <!-- Agrega las demás propiedades aquí -->
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr style="text-align:center;"><td colspan="11">No hay registros</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                            <!--input type="submit" value="Guardar Libro" /-->
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="TEST" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Elegir Excel</h5>
+                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </a>
+                </div>
+                <div class="modal-body">
+                    <label for="file">Seleccionar Archivo Excel:</label>
+                    <input type="file" name="file" id="file" accept=".xlsx" class="form-control" required />
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</a>
+                    <a class="btn form-group row text-right">
+                        <button type="submit" class="btn btn-success btn-sm">Cargar Excel</button>
+                    </a>
+                    <br>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

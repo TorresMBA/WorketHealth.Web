@@ -1,5 +1,6 @@
-﻿@using WorketHealth.Web.Models
-@model ProyectoViewModel
+﻿@*@using System.Globalization*@
+@model WorketHealth.DataAccess.Models.Fecha.Mes
+@*@model ProyectoViewModel*@
 @{
     ViewData["Title"] = "Proyecto Trujillo";
 }
@@ -12,40 +13,253 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="card">
                     <div class="card-body">
-                        <form>
+                        <form onsubmit="procesarFormulario(); return false;">
                              <div class="form-group row">
                                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12" >
                                     <label class="col-12 col-sm-3 col-form-label text-sm-right">Seleccione un mes</label>
                                     <div class="col-sm-12 col-lg-12 mb-sm-12">
-                                        <select class="form-control" asp-for="MesSeleccionado">
+                                                <select id="mes" asp-for="Fecha.Month" asp-items="ViewBag.Meses" class="form-control">
+                                                    <option value="">Selecciona un mes</option>
+                                                </select>
+                                     @*   <select class="form-control" asp -for="MesSeleccionado">
                                             <option disabled selected>-- Seleccione un Mes --</option>
                                             @foreach (var mes in Model.ListaMes)
                                                 {
                                                     <option value="@mes.Value" selected="@((mes.Value == ViewBag.MesActual))">@mes.Text</option>
                                                 }
-                                        </select>
+                                        </select>*@
                                      </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
                                     <label class="col-12 col-sm-3 col-form-label text-sm-right">Seleccione un año</label>
                                     <div class="col-sm-12 col-lg-12 mb-sm-12">
-                                        <select class="form-control" asp-for="AnhoSeleccionado">
+                                            <select id="anio" asp-for="Fecha.Year" asp-items="ViewBag.Anhos" class="form-control">
+                                                <option value="">Selecciona un año</option>
+                                            </select>
+                                        @*<select class="form-control" asp-for="AnhoSeleccionado">
                                             <option disabled selected>-- Seleccione un Año --</option>
                                             @foreach (var anho in Model.ListaAnho)
                                             {
                                                 <option value="@anho.Value" selected="@((anho.Value == ViewBag.AñoActual))">@anho.Text</option>
                                             }
-                                        </select>
+                                        </select>*@
                                     </div>
                                 </div>
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
+                                    </div>
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12" style="text-align:right;">
+                                    <br />
+                                        <button type="submit" class="btn btn-dark">Filtrar</button>                              
+                                </div>                                
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>                
             </div>
             <!-- ============================================================== -->
             <!-- end search bar  -->
-            <!-- ============================================================== -->
+            <!-- ============================================================== -->            
         </div>
-     </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <h5 class="card-header">Registros</h5>
+                    <div class="card-body" style="display: flex;">
+                            <canvas id="chartNroRegistros"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h5 class="card-header">Registros</h5>
+                    <div class="card-body" style="display: flex;">
+                        <canvas id="chartNroRegistros2"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
+                <div class="card">
+                    <h5 class="card-header">Tipo de Examen</h5>
+                    <div class="card-body" style="display: flex; ">
+                        <canvas id="chartTipoExamen"></canvas>
+                    </div>
+                </div>
+            </div>
+    </div>
 </div>
+@section Scripts{
+    <script>
+        function resumenNroRegistros(){
+            fetch("resumenNroRegistro")
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+
+                    const labels = dataJson.map((item) => {return item.y})
+                    const valuesA = dataJson.map((item) => {return item.a})
+                    const valuesB = dataJson.map((item) => {return item.b})
+
+
+
+                    const data = {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Registros Mensuales',
+                            data: valuesB,
+                            borderColor: 'rgb(75, 192, 192)',
+                            fill: false,
+                        }]
+                    };
+
+                    const config = {
+                        type: 'line',
+                        data: data,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    };
+
+                    const canvas = document.getElementById('chartNroRegistros');
+                    const ctx = canvas.getContext('2d');
+                    new Chart(ctx, config);
+                    
+     
+                })
+                .catch((error) => {
+                    console.error("---- Ocurrio el error :", error);
+                });
+        }
+        function resumenNroRegistros2() {
+            fetch("resumenNroRegistro")
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+
+                    const labels = dataJson.map((item) => { return item.y })
+                    const valuesA = dataJson.map((item) => { return item.a })
+                    const valuesB = dataJson.map((item) => { return item.b })
+
+
+
+                    const data = {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Registros Mensuales',
+                            data: valuesB,
+                            borderColor: 'rgb(75, 192, 192)',
+                            fill: false,
+                        }]
+                    };
+
+                    const config = {
+                        type: 'line',
+                        data: data,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    };
+
+                    const canvas = document.getElementById('chartNroRegistros2');
+                    const ctx = canvas.getContext('2d');
+                    new Chart(ctx, config);
+
+
+                })
+                .catch((error) => {
+                    console.error("---- Ocurrio el error :", error);
+                });
+        }
+        function resumenTipoExamen(mes, anio) {
+
+                fetch(`resumenTipoExamen?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    console.log(dataJson);
+
+                    const labels = dataJson.map((item) => { return item.tipoExamen })
+                    const values = dataJson.map((item) => { return item.nroTipo })
+
+                    console.log(labels);
+                    console.log(values);
+
+                    const data = {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Tipo de Examen',
+                            data: values,
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)',
+                                'rgb(139, 230, 41)',
+                                'rgb(186, 82, 232)',
+                                'rgb(234, 133, 73)'
+                            ],
+                        }]
+                    };
+
+                    const config = {
+                        type: 'doughnut',
+                        data: data,
+                    };
+
+                    const canvas = document.getElementById('chartTipoExamen');
+                    const ctx = canvas.getContext('2d');
+
+                    // Destruir el gráfico existente si ya existe
+            if (window.myDoughnutChart) {
+                window.myDoughnutChart.destroy();
+            }
+                        window.myDoughnutChart = new Chart(ctx, config);
+                   // new Chart(ctx, config);
+
+
+                })
+                .catch((error) => {
+                    console.error("---- Ocurrio el error :", error);
+                });
+        }
+
+       
+
+        $(document).ready(() => {
+                // Obtener el mes y el año actuales
+                const fechaActual = new Date();
+                const mesActual = fechaActual.getMonth() + 1; // Los meses en JavaScript son indexados desde 0
+                const anioActual = fechaActual.getFullYear();
+
+            resumenNroRegistros();
+            resumenNroRegistros2();
+            resumenTipoExamen(mesActual, anioActual);
+        })
+    </script>
+        <script>
+            // Definir la función que quieres llamar desde el formulario
+            function procesarFormulario() {
+                // Obtener los valores seleccionados
+                const mesSeleccionado = document.getElementById('mes').value;
+                const anioSeleccionado = document.getElementById('anio').value;
+
+                // Lógica adicional con los valores seleccionados
+                console.log("Mes seleccionado:", mesSeleccionado);
+                console.log("Año seleccionado:", anioSeleccionado);
+
+                // Llamar a tu función resumenTipoExamen con los valores seleccionados
+                resumenTipoExamen(mesSeleccionado, anioSeleccionado);
+
+                // Aquí puedes agregar lógica adicional antes de enviar el formulario, si es necesario.
+            }
+        </script>
+       
+}

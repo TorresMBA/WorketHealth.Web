@@ -65,7 +65,7 @@ namespace WorketHealth.Web.Controllers
 
         //Registro especial admin
         [HttpGet]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador,Desarrollador")]
         public async Task<IActionResult> RegistroAdmin()
         {
 
@@ -101,7 +101,7 @@ namespace WorketHealth.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador,Desarrollador")]
         public async Task<ActionResult> RegistroAdmin(Models.RegistroViewModel rgViewModel)
         {
             if (ModelState.IsValid)

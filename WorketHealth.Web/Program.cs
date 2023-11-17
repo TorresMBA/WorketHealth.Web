@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using WorketHealth.DataAccess;
 using WorketHealth.DataAccess.Models;
+using WorketHealth.Domain.Entities.Fecha;
+using WorketHealth.Domain.Interfaces.Fecha;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,9 @@ builder.Services.AddDbContext<WorketHealthContext>(c => {
     c.UseSqlServer(builder.Configuration.GetConnectionString("ProjectAzureDsn"));
 });
 #endregion
+
+builder.Services.AddScoped<IMesService, MesService>();
+builder.Services.AddScoped<IAnhoService, AnhoService>();
 
 //Agregar Servicoi Identity a la aplicacion
 builder.Services.AddIdentity<AppUsuario, IdentityRole>(options =>
@@ -52,6 +58,18 @@ builder.Services.ConfigureApplicationCookie(options =>
 //    options.Lockout.MaxFailedAccessAttempts = 3;
 //});
 
+//builder.Services.Configure<FormOptions>(options =>
+//{
+//    options.ValueLengthLimit = int.MaxValue;
+//    options.MultipartBodyLengthLimit = long.MaxValue;
+//});
+
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = int.MaxValue;
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -74,15 +92,15 @@ using(var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<WorketHealthContext>();
-        //await context.Database.MigrateAsync();   //se pueso en nota para probar el DbInitializer (ingresa datos iniciales a las tablas al primer uso)
-        context.Database.Migrate(); // Aplicar migraciones
+        await context.Database.MigrateAsync();   //se pueso en nota para probar el DbInitializer (ingresa datos iniciales a las tablas al primer uso)
+        //context.Database.Migrate(); // Aplicar migraciones
         // Llama al DbInitializer para agregar datos iniciales (si es necesario)
-        // var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-        // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+         var userManager = services.GetRequiredService<UserManager<AppUsuario>>();
+         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         //  WorketHealthInitializer.Initialize(context);
 
         // Llama al método Initialize directamente en la clase estática
-        WorketHealthInitializer.Initialize(context);
+        WorketHealthInitializer.Initialize(context, userManager, roleManager);
 
     } catch(Exception ex)
     {

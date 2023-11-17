@@ -37,34 +37,34 @@ namespace WorketHealth.Web.Controllers {
         public async Task<IActionResult> Login()
         {
             // Para la cracion de los roles
-            if (!await _roleManager.RoleExistsAsync("Administrador"))
-            {
-                //Creacion de rol administrador
-                await _roleManager.CreateAsync(new IdentityRole("Administrador"));
-
-
-                //Creacion de Usuarios
-                await CreateUserAndAssignRole(_userManager, "Administrador", "Administrador@example.com", "Qwer@123?", "Administrador");
-                await CreateUserAndAssignRole(_userManager, "Desarrollador1", "Desarrollador1@example.com", "Qwer@123?", "Administrador");
-                await CreateUserAndAssignRole(_userManager, "Desarrollador2", "Desarrollador2@example.com", "Qwer@123?", "Administrador");
-
-
-            }
-            if (!await _roleManager.RoleExistsAsync("Desarrollador"))
-            {
-                //Creacion de rol administrador
-                await _roleManager.CreateAsync(new IdentityRole("Desarrollador"));
-            }
-            if (!await _roleManager.RoleExistsAsync("Visitante"))
-            {
-                //Creacion de rol administrador
-                await _roleManager.CreateAsync(new IdentityRole("Visitante"));
-            }
-            if (!await _roleManager.RoleExistsAsync("Registrado"))
-            {
-                //Creacion de rol usuario registrado
-                await _roleManager.CreateAsync(new IdentityRole("Registrado"));
-            }
+         //  // if (!await _roleManager.RoleExistsAsync("Administrador"))
+         //  // {
+         //  //     //Creacion de rol administrador
+         //  //     await _roleManager.CreateAsync(new IdentityRole("Administrador"));
+         //  //
+         //  //
+         //  //     //Creacion de Usuarios
+         //  //     await CreateUserAndAssignRole(_userManager, "Administrador", "Administrador@example.com", "Qwer@123?", "Administrador");
+         //  //     await CreateUserAndAssignRole(_userManager, "Desarrollador1", "Desarrollador1@example.com", "Qwer@123?", "Administrador");
+         //  //     await CreateUserAndAssignRole(_userManager, "Desarrollador2", "Desarrollador2@example.com", "Qwer@123?", "Administrador");
+         //  //
+         //  //
+         //  // }
+         //  // if (!await _roleManager.RoleExistsAsync("Desarrollador"))
+         //  // {
+         //  //     //Creacion de rol administrador
+         //  //     await _roleManager.CreateAsync(new IdentityRole("Desarrollador"));
+         //  // }
+         //  // if (!await _roleManager.RoleExistsAsync("Visitante"))
+         //  // {
+         //  //     //Creacion de rol administrador
+         //  //     await _roleManager.CreateAsync(new IdentityRole("Visitante"));
+         //  // }
+         //  // if (!await _roleManager.RoleExistsAsync("Registrado"))
+         //  // {
+         //  //     //Creacion de rol usuario registrado
+         //  //     await _roleManager.CreateAsync(new IdentityRole("Registrado"));
+         //  // }
 
             return View();
         }

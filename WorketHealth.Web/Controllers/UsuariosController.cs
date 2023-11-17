@@ -18,7 +18,7 @@ namespace WorketHealth.Web.Controllers
             _userManager = userManager;
             _contexto = contexto;
         }
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador,Desarrollador")]
         [HttpGet]        
         public async Task<IActionResult> Index()
         {

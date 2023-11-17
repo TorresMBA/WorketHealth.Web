@@ -4,6 +4,7 @@ using WorketHealth.DataAccess.Models;
 using WorketHealth.DataAccess.Models.Fecha;
 using WorketHealth.DataAccess.Models.Personal;
 using WorketHealth.DataAccess.Models.Registros;
+using WorketHealth.DataAccess.Models.Tablas;
 using WorketHealth.Domain.Entities;
 
 namespace WorketHealth.DataAccess {
@@ -28,6 +29,7 @@ namespace WorketHealth.DataAccess {
         public DbSet<SeguimientoEnfermedad> SeguimientoEnfermedad { get; set; }
         public DbSet<SeguimientoEnfermedadTrabajo> SeguimientoEnfermedadTrabajo { get; set; }
         public DbSet<SeguimientoEnfermedadProfesional> SeguimientoEnfermedadProfesional { get; set; }
+        public DbSet<Ruc> Ruc { get; set; }
 
         //
 

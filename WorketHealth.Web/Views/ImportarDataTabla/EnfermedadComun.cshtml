@@ -1,0 +1,141 @@
+﻿@*@model List<WorketHealth.DataAccess.Models.Registros.EnfermedadComun>*@
+@model IEnumerable<WorketHealth.DataAccess.Models.Registros.EnfermedadComun>
+@*@using System.Data;
+@model DataTable*@
+
+@{
+    ViewData["Title"] = "Importar de Excel a Tabla";
+}
+<div class="container-fluid dashboard-content">
+    @if (TempData["Correcto"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Correcto"]
+            <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+        </div>
+    }
+    <!-- Agrega los botones y el formulario para enviar los datos al controlador -->
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            @using (Html.BeginForm("CargarDatosEnBDEnfermedadesComunes", "InsertarEnBDTabla", FormMethod.Post))
+            {
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var elemento in Model)
+                    {
+                        @Html.HiddenFor(model => elemento.COD)
+                        @Html.HiddenFor(model => elemento.DESCRIPCION)
+                        <!-- Otros campos del elemento -->
+                    }
+                }
+            <!--form asp-action="CargarDatosEnBDEnfermedadesComunes" asp-controller="InsertarEnBDTabla" method="post"-->
+                @* @if (Model != null && Model.Count > 0)
+                {
+                    List<WorketHealth.DataAccess.Models.Registros.EnfermedadComun> excelDataList = Model.ToList();
+                    <input asp-for="@excelDataList" type="hidden" />
+                 }*@
+                <div class="card">
+
+                    <div class="card-header d-flex">
+                        <h5 class="card-header-title">Enfermedad Comun</h5>
+                        <div class="toolbar ml-auto">
+                            <a href="#" data-toggle="modal" data-target="#exampleModal">
+                                    <button type="submit" class=" btn btn-success btn-sm">
+                                    <i class="fas fa-file-excel"></i> Importar Excel
+                                    </button>
+                                </a>
+                            <a href="">
+                                <button type="submit" class=" btn btn-danger btn-sm">
+                                    <i class="fas fa-database"></i> Insertar en BD
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table" id="miTabla">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">CODIGO</th>
+                                        <th scope="col">DESCRIPCION</th>
+                                        <!-- Define las demás columnas aquí -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @*@if (Model != null && Model.Count > 0)*@
+                                    @if (Model != null && Model.Any())
+                                    {
+                                      // int contador = 0;
+                                      // @foreach (DataRow row in Model.Rows)
+                                      // {
+                                      //     <tr>
+                                      //         <td>@contador ++</td>
+                                      //         <td>@row["COD"]</td>
+                                      //         <td>@row["DESCRIPCION"]</td>
+                                      //     </tr>
+                                      // }
+
+                                       @* @for (var i = 0; i < Model.Count; i++)*@
+                                        foreach (var elemento in Model)
+                                        {
+                                            <tr>
+                                                <td> </td>
+                                                <td>
+                                                    @elemento.COD
+                                                    @* @Model[i].COD<input asp-for="@Model[i].COD" type="hidden" /></td><input asp-for="@elemento.COD" type="hidden" />
+                                                *@
+                                                <td>
+                                                        @elemento.DESCRIPCION
+                                                        @*@Model[i].DESCRIPCION<input asp-for="@Model[i].DESCRIPCION" type="hidden" /></td><input asp-for="@elemento.DESCRIPCION" type="hidden" />
+                                                *@
+                                                <!-- Agrega las demás propiedades aquí -->
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr style="text-align:center;"><td colspan="2">No hay registros</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                }
+            <!-- form -->
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="EnfermedadComun" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Elegir Excel</h5>
+                    <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </a>
+                </div>
+                <div class="modal-body">
+                    <label for="file">Seleccionar Archivo Excel:</label>
+                    <input type="file" name="file" id="file" accept=".xlsx" class="form-control" required />
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</a>
+                    <a class="btn form-group row text-right">
+                        <button type="submit" class="btn btn-success btn-sm">Cargar Excel</button>
+                    </a>
+                    <br>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

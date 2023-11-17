@@ -1,4 +1,5 @@
-﻿@model List<WorketHealth.DataAccess.Models.Registros.F_SEG_19>
+﻿@model WorketHealth.DataAccess.Models.ViewModels.ViewF_SEG_19
+
 @{
     ViewData["Title"] = "Importar Excel";
 }
@@ -19,6 +20,7 @@
     }
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <form asp-action="CargarDatosEnBD" asp-controller="InsertarEnBD" method="post">
             <div class="card">
                 
                 <div class="card-header d-flex" >
@@ -30,8 +32,9 @@
                                     <i class="fas fa-file-excel"></i> Importar Excel
                                     </button>
                                 </a>
+                            <a href="@Url.Action("DescargarExcelF_SEG_19", "Proyecto")" class="btn btn-outline-success btn-sm"><i class="fas fa-download"></i> Descargar Excel</a>
                                 <a href="" >
-                                    <button id="enviarDatosButton" type="submit" class=" btn btn-danger btn-sm">
+                                    <button type="submit" class=" btn btn-danger btn-sm">
                                             <i class="fas fa-database"></i> Insertar en BD
                                      </button>
                                 </a>
@@ -40,11 +43,11 @@
                 </div>                
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table" id="dataTable">
+                            <table class="table" id="miTabla">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">DNI</th>
+                                    <th scope="col" style="text-align:center;">#</th>
+                                    <th scope="col" style="text-align:center;">DNI</th>
                                     <th scope="col">PrimerNombre</th>
                                     <th scope="col">SegundoNombre</th>
                                     <th scope="col">PrimerApellido</th>
@@ -66,31 +69,40 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model != null && Model.Count > 0)
+                                @if (Model.F_SEG_19 != null && Model.F_SEG_19.Count > 0)
                                 {
-                                    @foreach (var data in Model)
+                                        @for (var i = 0; i < Model.F_SEG_19.Count; i++)
                                     {
-                                        <tr>    
-                                            <td>@data.Id</td>
-                                            <td>@data.DNI</td>
-                                            <td>@data.PrimerNombre </td>                                            
-                                            <td>@data.SegundoNombre </td>                                            
-                                            <td>@data.PrimerApellido </td>                                            
-                                            <td>@data.SegundoApellido</td>                                            
-                                            <td>@data.FechaNacimiento</td>                                            
-                                            <td>@data.Sexo </td>                                            
-                                            <td>@data.TipoExamen </td>                                            
-                                            <td>@data.FechaExamen </td>                                            
-                                            <td>@data.Area</td>                                            
-                                            <td>@data.PuestoDeTrabajo</td>                                            
-                                            <td>@data.Aptitud </td>                                            
-                                            <td>@data.Restricciones </td>                                            
-                                            <td>@data.ID_EC </td>                                            
-                                            <td>@data.ID_ERT</td>                                            
-                                            <td>@data.ID_EP </td>                                            
-                                            <td style="display:none" >@data.RUC</td>
-                                            <td style="display:none" >@data.Mes</td>
-                                            <td style="display:none" >@data.Anho</td>
+                                        <tr>
+                                                <td>
+                                                    <div class ="btn-group">
+                                                        @*<button class="btn btn-sm btn-outline-light" onclick="eliminarFila(@Model.F_SEG_19[i].Id)"><i class="far fa-trash-alt"></i></button>*@
+                                                        <button class="btn btn-dark btn-xs" disabled>
+                                                            @Model.F_SEG_19[i].Id<input asp-for="@Model.F_SEG_19[i].Id" type="hidden" />
+                                                        </button>
+                                                    </div>
+                                                    
+                                                </td>
+                                                <!--td>  Model[i].Id </!--td-->
+                                                <td>@Model.F_SEG_19[i].DNI <input asp-for="@Model.F_SEG_19[i].DNI" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].PrimerNombre <input asp-for="@Model.F_SEG_19[i].PrimerNombre" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].SegundoNombre <input asp-for="@Model.F_SEG_19[i].SegundoNombre" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].PrimerApellido <input asp-for="@Model.F_SEG_19[i].PrimerApellido" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].SegundoApellido <input asp-for="@Model.F_SEG_19[i].SegundoApellido" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].FechaNacimiento <input asp-for="@Model.F_SEG_19[i].FechaNacimiento" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].Sexo <input asp-for="@Model.F_SEG_19[i].Sexo" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].TipoExamen <input asp-for="@Model.F_SEG_19[i].TipoExamen" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].FechaExamen <input asp-for="@Model.F_SEG_19[i].FechaExamen" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].Area <input asp-for="@Model.F_SEG_19[i].Area" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].PuestoDeTrabajo <input asp-for="@Model.F_SEG_19[i].PuestoDeTrabajo" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].Aptitud <input asp-for="@Model.F_SEG_19[i].Aptitud" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].Restricciones <input asp-for="@Model.F_SEG_19[i].Restricciones" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].ID_EC <input asp-for="@Model.F_SEG_19[i].ID_EC" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].ID_ERT <input asp-for="@Model.F_SEG_19[i].ID_ERT" type="hidden" /></td>
+                                                <td>@Model.F_SEG_19[i].ID_EP <input asp-for="@Model.F_SEG_19[i].ID_EP" type="hidden" /></td>
+                                                <td style="display:none">@Model.F_SEG_19[i].RUC <input asp-for="@Model.F_SEG_19[i].RUC" type="hidden" /></td>
+                                                <td style="display:none">@Model.F_SEG_19[i].Mes <input asp-for="@Model.F_SEG_19[i].Mes" type="hidden" /></td>
+                                                <td style="display:none">@Model.F_SEG_19[i].Anho <input asp-for="@Model.F_SEG_19[i].Anho" type="hidden" /></td>
                                         </tr>
                                     }
 
@@ -104,6 +116,7 @@
                     </div>                    
                 </div>                
             </div>
+            </form>
         </div>
 
     </div>
@@ -128,6 +141,13 @@
                     <input type="file" name="file" id="file" accept=".xlsx" class="form-control" required />
                 </div>
 
+                <select name="ID_RUC">
+                    @foreach (var RUC in Model.RUC)
+                    {
+                        <option value="@RUC.ID_RUC">@RUC.NOM_RUC</option>
+                    }
+                </select>
+
                 <div class="modal-footer">
                     <a href="#" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</a>
                     <a class="btn form-group row text-right">
@@ -140,7 +160,18 @@
     </div>
 </div>
 @section Scripts{
-    <script>
+    @*<script>
+        function eliminarFila() {
+            var tabla = document.getElementById("miTabla");
+            var filaAEliminar = tabla.getElementsByTagName("tr"); // Índice 1 para la segunda fila (0-indexed).
+            if (filaAEliminar) {
+                filaAEliminar.parentNode.removeChild(filaAEliminar);
+            }
+        }
+
+        eliminarFila();
+    </script>*@
+ @*   <script>
         $(document).ready(function () {
             $("#enviarDatosButton").click(function () {
                 var tableData = [];
@@ -182,5 +213,5 @@
                 });
             });
         });
-    </script>
+    </script>*@
 }
