@@ -141,12 +141,17 @@
                     <input type="file" name="file" id="file" accept=".xlsx" class="form-control" required />
                 </div>
 
-                <select name="ID_RUC">
-                    @foreach (var RUC in Model.RUC)
-                    {
-                        <option value="@RUC.ID_RUC">@RUC.NOM_RUC</option>
-                    }
-                </select>
+               
+                <div class="modal-body">
+                    <label>Seleccion un proyecto</label>
+                    <select class="form-control" name="ID_RUC" required>
+                        <option disabled selected>-- Selccionar proyecto --</option>
+                        @foreach (var RUC in Model.RUC)
+                        {
+                            <option value="@RUC.ID_RUC">@RUC.NOM_RUC</option>
+                        }
+                    </select>
+                </div>
 
                 <div class="modal-footer">
                     <a href="#" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</a>

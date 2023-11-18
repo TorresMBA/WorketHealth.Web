@@ -26,7 +26,10 @@ namespace WorketHealth.Web.Controllers
         [HttpGet]
         public IActionResult F_SIG_19()
         {
-            return RedirectToAction();
+            var miModelo = new ViewF_SEG_19() {
+                RUC = ObtenerDatosRuc()
+            };
+            return View(miModelo);
         }
 
         public List<Ruc> ObtenerDatosRuc()
@@ -50,7 +53,7 @@ namespace WorketHealth.Web.Controllers
                         {
                             ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
-                            var excelDataList = new List<F_SEG_19>();
+                            var excelDataList1 = new List<F_SEG_19>();
 
                             for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
                             {
@@ -97,13 +100,20 @@ namespace WorketHealth.Web.Controllers
                                     //{
                                     //    data.FechaExamen = fechaExamen;
                                     //}
-                                    excelDataList.Add(data);
+                                    excelDataList1.Add(data);
                                 }
 
                                 
                             }
 
-                            ViewBag.ExcelData = excelDataList;
+                            ViewBag.ExcelData = excelDataList1;
+
+                            var excelDataList = new ViewF_SEG_19()
+                            {
+                                RUC = ObtenerDatosRuc(),
+                                F_SEG_19 = excelDataList1
+                            };
+
 
                             // Puedes guardar excelDataList en una variable de sesión o en una base de datos temporal si es necesario.
 
