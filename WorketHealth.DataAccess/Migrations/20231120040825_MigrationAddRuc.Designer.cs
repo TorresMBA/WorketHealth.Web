@@ -12,7 +12,7 @@ using WorketHealth.DataAccess;
 namespace WorketHealth.DataAccess.Migrations
 {
     [DbContext(typeof(WorketHealthContext))]
-    [Migration("20231115230649_MigrationAddRuc")]
+    [Migration("20231120040825_MigrationAddRuc")]
     partial class MigrationAddRuc
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

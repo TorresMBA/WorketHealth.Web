@@ -54,3 +54,4 @@ x64/
 # OS generated files #
 .DS_Store*
 Icon?
+/WorketHealth.Web/appsettings.json
