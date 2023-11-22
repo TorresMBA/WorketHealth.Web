@@ -6,7 +6,8 @@ using WorketHealth.DataAccess.Models.Registros;
 using WorketHealth.DataAccess.Models.Personal;
 
 
-using WorketHealth.Web.Models;// PONER EN NOTA
+using WorketHealth.Web.Models;
+using WorketHealth.DataAccess.Models.ViewModels;// PONER EN NOTA
 
 namespace WorketHealth.Web.Controllers
 {
@@ -19,8 +20,10 @@ namespace WorketHealth.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult CargarDatosEnBD(List<F_SEG_19> excelDataList)
+        public IActionResult CargarDatosEnBD(ViewF_SEG_19 excelDataList1)
         {
+            List<F_SEG_19> excelDataList = excelDataList1.F_SEG_19;
+
             if (excelDataList != null && excelDataList.Count > 0)
             {
                 try
@@ -43,12 +46,12 @@ namespace WorketHealth.Web.Controllers
                             var nuevaPersona = new Personal
                             {
                                 Dni = data.DNI.Trim(),
-                                Primer_Nombre = data.PrimerNombre.Trim(),
+                                Primer_Nombre = data.PrimerNombre,
                                 Segundo_Nombre = data.SegundoNombre,
                                 Primer_Apellido = data.PrimerApellido,
                                 Segundo_Apellido = data.SegundoApellido,
                                 Fec_Nacimiento = (DateTime)data.FechaNacimiento,
-                                Sexo = data.Sexo.Trim()
+                                Sexo = data.Sexo
                             };
 
                             _contexto.Personal.Add(nuevaPersona);
@@ -180,14 +183,14 @@ namespace WorketHealth.Web.Controllers
                     }
 
 
-                    _contexto.SaveChanges();
+                        _contexto.SaveChanges();
 
                     TempData["Correcto"] = "Datos insertados en la base de datos correctamente.";
                     return RedirectToAction("Index", "ImportarData");
                 }
                 catch (Exception ex)
                 {
-                    TempData["Error"] = "Error al insertar en la base de datos: " + ex.Message;
+                    TempData["Error"] = "Error al insertar en la base de datos: " + ex.Message; 
                 }
             }
             else

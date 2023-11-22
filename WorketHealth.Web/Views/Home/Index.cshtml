@@ -1,60 +1,98 @@
-﻿
+﻿@model WorketHealth.DataAccess.Models.Fecha.Mes
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Dashboard Principal";
 }
 <div class="dashboard-ecommerce">
     <div class="container-fluid dashboard-content ">
-        <!-- ============================================================== -->
-        <!-- pageheader  -->
-        <!-- ============================================================== -->
+
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="page-header">
-                    <h2 class="pageheader-title">Dashboard</h2>
+                    <h2 class="pageheader-title">Dashboard Principal</h2>
                     @*<p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>*@
-                    <div class="page-breadcrumb">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Panel</li>
-                            </ol>
-                        </nav>
+                    @* <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Panel</li>
+                    </ol>
+                    </nav>
+                    </div> *@
+                </div>
+            </div>
+        </div>
+
+        @if (TempData["Correcto"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Correcto"]
+                <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <a class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></a>
+            </div>
+        }
+             
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form onsubmit="procesarFormulario(); return false;">
+                            <div class="form-group row">
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
+                                    <label class="col-12 col-sm-3 col-form-label text-sm-right">Seleccione un mes</label>
+                                    <div class="col-sm-12 col-lg-12 mb-sm-12">
+                                        <select id="mes" asp-for="Fecha.Month" asp-items="ViewBag.Meses" class="form-control">
+                                            <option value="">Selecciona un mes</option>
+                                        </select>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
+                                    <label class="col-12 col-sm-3 col-form-label text-sm-right">Seleccione un año</label>
+                                    <div class="col-sm-12 col-lg-12 mb-sm-12">
+                                        <select id="anio" asp-for="Fecha.Year" asp-items="ViewBag.Anhos" class="form-control">
+                                            <option value="">Selecciona un año</option>
+                                        </select>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12" style="text-align:right;">
+                                    <br />
+                                    <button type="submit" class="btn btn-dark">Filtrar</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
-            <!-- ============================================================== -->
-            <!-- pie chart  -->
-            <!-- ============================================================== -->
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                 <div class="card">
-                    <h5 class="card-header">Pie Chart </h5>
-                    <div class="card-body">
-                        <div id="c3chart_pie"></div>
+                    <h5 class="card-header">Tipo de Examen</h5>
+                    <div class="card-body" style="display: flex; ">
+                        <canvas id="chartTipoExamen"></canvas>
                     </div>
                 </div>
             </div>
-            <!-- ============================================================== -->
-            <!-- end pie chart  -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- dount chart  -->
-            <!-- ============================================================== -->
+
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                 <div class="card">
-                    <h5 class="card-header">Donut Chart </h5>
-                    <div class="card-body">
-                        <div id="c3chart_donut"></div>
+                    <h5 class="card-header">Genero</h5>
+                    <div class="card-body" style="display: flex; ">
+                        <canvas id="chartSexo"></canvas>
                     </div>
                 </div>
             </div>
-            <!-- ============================================================== -->
-            <!-- end dount chart  -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- dount gauge  -->
-            <!-- ============================================================== -->
+
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                 <div class="card">
                     <h5 class="card-header">Donut Guage </h5>
@@ -63,16 +101,126 @@
                     </div>
                 </div>
             </div>
-            <!-- ============================================================== -->
-            <!-- end dount gauge  -->
-            <!-- ============================================================== -->
         </div>
+
     </div>
-    </div>
-@*
-@section script{
-    <script src="~/assets/vendor/charts/c3charts/c3.min.js"></script>
-    <script src="~/assets/vendor/charts/c3charts/d3-5.4.0.min.js"></script>
-    <script src="~/assets/vendor/charts/c3charts/C3chartjs.js"></script>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(() => {
+            // Obtener el mes y el año actuales
+            const fechaActual = new Date();
+            const mesActual = fechaActual.getMonth() + 1; // Los meses en JavaScript son indexados desde 0
+            const anioActual = fechaActual.getFullYear();
+
+            resumenTipoExamen(mesActual, anioActual);
+            resumenSexo(mesActual, anioActual);
+        })
+
+        function resumenTipoExamen(mes, anio) { 
+            fetch(`resumenTipoExamen?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    console.log(dataJson);
+                    const labels = dataJson.map((item) => { return item.tipoExamen })
+                    const values = dataJson.map((item) => { return item.nroTipo })     
+                    const data = {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Tipo de Examen',
+                            data: values,
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)',
+                                'rgb(139, 230, 41)',
+                                'rgb(186, 82, 232)',
+                                'rgb(234, 133, 73)'
+                            ],
+                        }]
+                    };
+                    const config = {
+                        type: 'doughnut',
+                        data: data,
+                    };
+                    const canvas = document.getElementById('chartTipoExamen');
+                    const ctx = canvas.getContext('2d');
+
+                    // Destruir el gráfico existente si ya existe
+                    if (window.myDoughnutChart) {
+                        window.myDoughnutChart.destroy();
+                    }
+                    window.myDoughnutChart = new Chart(ctx, config);
+                    // new Chart(ctx, config);
+
+
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+        function resumenSexo(mes, anio) {
+            fetch(`resumenSexo?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    console.log(dataJson);
+                    const labels = dataJson.map((item) => { return item.tipoExamen })
+                    const values = dataJson.map((item) => { return item.nroTipo })
+                    const data = {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Tipo de Examen',
+                            data: values,
+                            backgroundColor: [
+                                'rgb(234, 133, 73)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)',
+                                'rgb(139, 230, 41)',
+                                'rgb(186, 82, 232)'
+                            ],
+                        }]
+                    };
+                    const config = {
+                        type: 'pie',
+                        data: data,
+                    };
+                    const canvas = document.getElementById('chartSexo');
+                    const ctx = canvas.getContext('2d');
+
+                    // Destruir el gráfico existente si ya existe
+                    if (window.myPieChart) {
+                        window.myPieChart.destroy();
+                    }
+                    window.myPieChart = new Chart(ctx, config);
+                    // new Chart(ctx, config);
+
+
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+    </script>
+    <script>
+        // Definir la función que quieres llamar desde el formulario
+        function procesarFormulario() {
+            // Obtener los valores seleccionados
+            const mesSeleccionado = document.getElementById('mes').value;
+            const anioSeleccionado = document.getElementById('anio').value;
+
+            // Lógica adicional con los valores seleccionados
+            console.log("Mes seleccionado:", mesSeleccionado);
+            console.log("Año seleccionado:", anioSeleccionado);
+
+            // Llamar a tu función resumenTipoExamen con los valores seleccionados
+            resumenTipoExamen(mesSeleccionado, anioSeleccionado);
+            resumenSexo(mesSeleccionado, anioSeleccionado);
+
+            // Aquí puedes agregar lógica adicional antes de enviar el formulario, si es necesario.
+        }
+    </script>
 }
-*@

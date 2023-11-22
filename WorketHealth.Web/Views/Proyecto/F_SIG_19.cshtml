@@ -126,7 +126,7 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
     <div class="modal-dialog" role="document">
 
-        <form asp-action="F_SIG_19" method="post" enctype="multipart/form-data">
+        @* <form asp-action="F_SIG_19" method="post" enctype="multipart/form-data">
 
             <div class="modal-content">
                 <div class="modal-header">
@@ -138,13 +138,13 @@
 
                 <div class="modal-body">
                     <label for="file">Seleccionar Archivo Excel:</label>
-                    <input type="file" name="file" id="file" accept=".xlsx" class="form-control" required />
+                    <input asp-for="ArchivoModel.archivo" type="file" name="file" id="file" accept=".xlsx" class="form-control" required />
                 </div>
 
                
                 <div class="modal-body">
                     <label>Seleccion un proyecto</label>
-                    <select class="form-control" name="ID_RUC" required>
+                    <select asp-for="ArchivoModel.Ruc" class="form-control" name="ID_RUC" required>
                         <option disabled selected>-- Selccionar proyecto --</option>
                         @foreach (var RUC in Model.RUC)
                         {
@@ -161,7 +161,47 @@
                     <br>
                 </div>
             </div>
-            </form>
+            </form> *@
+        <form asp-action="F_SIG_19" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Importar Excel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="file">Seleccionar Archivo Excel:</label>
+                        <input asp-for="ArchivoModel.Archivo" type="file" id="file" accept=".xlsx" class="form-control" required />
+                        <span asp-validation-for="ArchivoModel.Archivo" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                <select asp-for="ArchivoModel.Ruc" class="form-control" required>
+                    <option disabled selected>-- Seleccionar proyecto --</option>
+                    @if (Model.RUC != null)
+                    {
+                        @foreach (var r in Model.RUC)
+                        {
+                            if (r != null)
+                            {
+                                <option value="@r.ID_RUC">@r.NOM_RUC</option>
+                            }
+                        }
+                    }
+                </select>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success btn-sm">Importar Excel</button>
+                </div>
+            </div>
+        </form>
+
     </div>
 </div>
 @section Scripts{
