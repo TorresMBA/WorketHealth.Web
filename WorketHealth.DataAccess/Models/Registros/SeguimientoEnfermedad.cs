@@ -10,5 +10,6 @@ namespace WorketHealth.DataAccess.Models.Registros
         public SeguimientoMedico SeguimientoMedico { get; set; }
         public int EnfermedadComunId { get; set; }
         public EnfermedadComun EnfermedadComun { get; set; }
+
     }
 }

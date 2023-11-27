@@ -78,8 +78,11 @@
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                 <div class="card">
                     <h5 class="card-header">Tipo de Examen</h5>
-                    <div class="card-body" style="display: flex; ">
-                        <canvas id="chartTipoExamen"></canvas>
+                    @* <div class="card-body" style="display: flex; ">
+                         <canvas id="chartTipoExamen"></canvas>                        
+                    </div> *@   
+                    <div class="card-body">
+                        <div id='chartTipoExamen'></div>
                     </div>
                 </div>
             </div>
@@ -87,17 +90,20 @@
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                 <div class="card">
                     <h5 class="card-header">Genero</h5>
-                    <div class="card-body" style="display: flex; ">
+                    @* <div class="card-body" style="display: flex; ">
                         <canvas id="chartSexo"></canvas>
+                    </div> *@
+                    <div class="card-body">
+                        <div id='chartSexo'></div>
                     </div>
                 </div>
             </div>
 
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                 <div class="card">
-                    <h5 class="card-header">Donut Guage </h5>
-                    <div class="card-body">
-                        <div id="c3chart_gauge"></div>
+                    <h5 class="card-header">Registros (F_SEG_19) </h5>
+                    <div class="card-body" >
+                        <div id='chartCantidadRegistrosF_SEG_19'></div>
                     </div>
                 </div>
             </div>
@@ -106,6 +112,7 @@
     </div>
 </div>
 @section Scripts{
+    <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
     <script>
         $(document).ready(() => {
             // Obtener el mes y el año actuales
@@ -115,6 +122,7 @@
 
             resumenTipoExamen(mesActual, anioActual);
             resumenSexo(mesActual, anioActual);
+            resumenF_SEG_19(mesActual, anioActual);
         })
 
         function resumenTipoExamen(mes, anio) { 
@@ -123,38 +131,64 @@
                     return response.ok ? response.json() : Promise.reject(response);
                 })
                 .then((dataJson) => {
-                    console.log(dataJson);
+           //         console.log(dataJson);
                     const labels = dataJson.map((item) => { return item.tipoExamen })
-                    const values = dataJson.map((item) => { return item.nroTipo })     
-                    const data = {
+                    const values = dataJson.map((item) => { return item.nroTipo })                    
+                 //   const data = {
+                 //       labels: labels,
+                 //       datasets: [{
+                 //           label: 'Tipo de Examen',
+                 //           data: values,
+                 //           backgroundColor: [
+                 //               'rgb(255, 99, 132)',
+                 //               'rgb(54, 162, 235)',
+                 //               'rgb(255, 205, 86)',
+                 //               'rgb(139, 230, 41)',
+                 //               'rgb(186, 82, 232)',
+                 //               'rgb(234, 133, 73)'
+                 //           ],
+                 //       }]
+                 //   };
+                 //   const config = {
+                 //       type: 'doughnut',
+                 //       data: data,
+                 //   };
+                 //   const canvas = document.getElementById('chartTipoExamen');
+                 //   const ctx = canvas.getContext('2d');
+                 //
+                 //   // Destruir el gráfico existente si ya existe
+                 //   if (window.myDoughnutChart) {
+                 //       window.myDoughnutChart.destroy();
+                 //   }
+                 //   window.myDoughnutChart = new Chart(ctx, config);
+                 //   // new Chart(ctx, config);
+                 //
+
+                    var data = [{
+                        type: "pie",
+                        values: values,
                         labels: labels,
-                        datasets: [{
-                            label: 'Tipo de Examen',
-                            data: values,
-                            backgroundColor: [
-                                'rgb(255, 99, 132)',
+                        textinfo: "label+percent",
+                        textposition: "outside",
+                        hole: .5,
+                        automargin: true,
+                        marker: {         // marker is an object, valid marker keys: #scatter-marker
+                            colors: ['rgb(255, 99, 132)',
                                 'rgb(54, 162, 235)',
-                                'rgb(255, 205, 86)',
                                 'rgb(139, 230, 41)',
                                 'rgb(186, 82, 232)',
-                                'rgb(234, 133, 73)'
-                            ],
-                        }]
-                    };
-                    const config = {
-                        type: 'doughnut',
-                        data: data,
-                    };
-                    const canvas = document.getElementById('chartTipoExamen');
-                    const ctx = canvas.getContext('2d');
+                                'rgb(234, 133, 73)' ]
+                        }
+                    }]
 
-                    // Destruir el gráfico existente si ya existe
-                    if (window.myDoughnutChart) {
-                        window.myDoughnutChart.destroy();
+                    var layout = {
+                        height: 350,
+                        // width: 400,
+                        margin: { "t": 10, "b": 10, "l": 10, "r": 10 },
+                        showlegend: true
                     }
-                    window.myDoughnutChart = new Chart(ctx, config);
-                    // new Chart(ctx, config);
 
+                    Plotly.newPlot('chartTipoExamen', data, layout)
 
                 })
                 .catch((error) => {
@@ -167,43 +201,117 @@
                     return response.ok ? response.json() : Promise.reject(response);
                 })
                 .then((dataJson) => {
-                    console.log(dataJson);
-                    const labels = dataJson.map((item) => { return item.tipoExamen })
-                    const values = dataJson.map((item) => { return item.nroTipo })
-                    const data = {
+             ////       console.log(dataJson);
+                    const labels = dataJson.map((item) => { return item.genero })
+                    const values = dataJson.map((item) => { return item.cantidad })
+            //        const data = {
+            //            labels: labels,
+            //            datasets: [{
+            //                label: 'Tipo de Examen',
+            //                data: values,
+            //                backgroundColor: [
+            //                    'rgb(255, 99, 132)',
+            //                    'rgb(54, 162, 235)',
+            //                    'rgb(139, 230, 41)',
+            //                    'rgb(186, 82, 232)',
+            //                    'rgb(234, 133, 73)'
+            //                ],
+            //            }]
+            //        };
+            //        const config = {
+            //            type: 'pie',
+            //            data: data,
+            //        };
+            //        const canvas = document.getElementById('chartSexo');
+            //        const ctx = canvas.getContext('2d');
+            //
+            //        // Destruir el gráfico existente si ya existe
+            //        if (window.myPieChart) {
+            //            window.myPieChart.destroy();
+            //        }
+            //        window.myPieChart = new Chart(ctx, config);
+            //        // new Chart(ctx, config);
+
+                    var data = [{
+                        type: "pie",
+                        values: values,
                         labels: labels,
-                        datasets: [{
-                            label: 'Tipo de Examen',
-                            data: values,
-                            backgroundColor: [
-                                'rgb(234, 133, 73)',
-                                'rgb(54, 162, 235)',
-                                'rgb(255, 205, 86)',
-                                'rgb(139, 230, 41)',
-                                'rgb(186, 82, 232)'
-                            ],
-                        }]
-                    };
-                    const config = {
-                        type: 'pie',
-                        data: data,
-                    };
-                    const canvas = document.getElementById('chartSexo');
-                    const ctx = canvas.getContext('2d');
+                        textinfo: "label+percent",
+                        textposition: "outside",
+                        automargin: true,
+                        marker: {         // marker is an object, valid marker keys: #scatter-marker
+                            colors: ['rgb(255, 99, 132)',
+                                     'rgb(54, 162, 235)',
+                                     'rgb(106, 138, 235)']
+                        }
+                    }]
 
-                    // Destruir el gráfico existente si ya existe
-                    if (window.myPieChart) {
-                        window.myPieChart.destroy();
+                    var layout = {
+                        height: 350,
+                        // width: 400,
+                        margin: { "t": 10, "b": 10, "l": 10, "r": 10 },
+                        showlegend: true
                     }
-                    window.myPieChart = new Chart(ctx, config);
-                    // new Chart(ctx, config);
 
+                    Plotly.newPlot('chartSexo', data, layout)
 
                 })
                 .catch((error) => {
                     console.error("Consola error :", error);
                 });
         }
+        function resumenF_SEG_19(mes, anio) {
+            fetch(`resumenoF_SEG_19?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    console.log("---------");
+                    console.log(dataJson);
+                    const labels = dataJson.map((item) => { return item.mes })
+                    const values = dataJson.map((item) => { return item.cantidad })
+                    const valuesString = dataJson.map((item) => { return item.cantidad })
+         
+                    console.log(labels);
+                    console.log(values);
+         
+                    var data = [{
+                        type: "pie",
+                        values: values,
+                        labels: ["Registros"],
+                        automargin: true,
+                        textinfo: "label+percent",
+                        textposition: "outside",
+                        hole: .4,
+                        marker: {         // marker is an object, valid marker keys: #scatter-marker
+                            colors: ['rgb(186, 82, 232)']// more about "marker.color": #scatter-marker-color
+                        }
+                    }]
+                  
+                    var layout = {
+                        height: 350,
+                       //  width: 250,
+                        margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
+                        showlegend: true,
+                        annotations: [{
+                            font: { size: 40 },
+                            showarrow: false,
+                            text: String(values),
+                            x: 0.5,
+                            y: 0.5
+                        }],
+                        grid: {
+                            rows: 1
+                        }   
+                    }
+
+                    Plotly.newPlot('chartCantidadRegistrosF_SEG_19', data, layout)
+         
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+              }
     </script>
     <script>
         // Definir la función que quieres llamar desde el formulario
@@ -219,8 +327,9 @@
             // Llamar a tu función resumenTipoExamen con los valores seleccionados
             resumenTipoExamen(mesSeleccionado, anioSeleccionado);
             resumenSexo(mesSeleccionado, anioSeleccionado);
+            resumenF_SEG_19(mesSeleccionado, anioSeleccionado);
 
             // Aquí puedes agregar lógica adicional antes de enviar el formulario, si es necesario.
         }
     </script>
-}
+  }

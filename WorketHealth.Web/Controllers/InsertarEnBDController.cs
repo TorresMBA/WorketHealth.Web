@@ -51,7 +51,8 @@ namespace WorketHealth.Web.Controllers
                                 Primer_Apellido = data.PrimerApellido,
                                 Segundo_Apellido = data.SegundoApellido,
                                 Fec_Nacimiento = (DateTime)data.FechaNacimiento,
-                                Sexo = data.Sexo
+                                Sexo = data.Sexo,
+                                Ruc = data.RUC
                             };
 
                             _contexto.Personal.Add(nuevaPersona);

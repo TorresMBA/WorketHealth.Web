@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Globalization;
 using WorketHealth.DataAccess;
+using WorketHealth.DataAccess.Models.Charts;
 using WorketHealth.DataAccess.Models.Fecha;
+using WorketHealth.DataAccess.Models.Tablas;
 using WorketHealth.DataAccess.Models.Test;
 using WorketHealth.Domain.Interfaces.Fecha;
 
@@ -65,93 +68,139 @@ namespace WorketHealth.Web.Controllers
           //  ViewData["testData"] = testData;
 
             return View();
+
         }
 
 
-        public IActionResult resumenNroRegistro()
+        public IActionResult resumenNroRegistro(int? mes, int? anio)
         {
-            var today = DateTime.Today;
-            var lastSixMonths = Enumerable.Range(0, 6)
-                .Select(i => today.AddMonths(-i))
+            //int anioActual = anio ?? DateTime.Now.Year;
+            //var today0 = new DateTime(anioActual, mes.Value, mes.Value);
+            //var today = DateTime.Today;
+            //var lastSixMonths = Enumerable.Range(0, 6)
+            //    .Select(i => today0.AddMonths(-i))
+            //    .ToList();
+            //var ListadoNroRegistro = new List<ChartData>
+            //{
+            //    new ChartData { y = "enero" , a = 10 , b = 10 },
+            //    new ChartData { y = "febrero" , a = 65 , b = 0 },
+            //    new ChartData { y = "marzo" , a = 50 , b = 20 },
+            //    new ChartData { y = "abril" , a = 75 , b = 20 }
+            //};
+            //var ListaNroRegistro = lastSixMonths.Select((date, index) =>
+            //{
+            //    var monthName = date.ToString("MMMM");
+            //    var manualEntry = ListadoNroRegistro.FirstOrDefault(entry => entry.y == monthName);
+            //
+            //    return new ChartData
+            //    {
+            //        y = monthName,
+            //        a = manualEntry != null ? manualEntry.a : 0,
+            //        b = manualEntry != null ? manualEntry.b : 0
+            //    };
+            //}).Reverse().ToList();
+
+
+            // Obtener el mes y año actual si no se proporcionan
+            int mesActual = mes ?? DateTime.Now.Month;
+            int anhoActual = anio ?? DateTime.Now.Year;
+
+            // Obtener los últimos 6 meses
+            List<DateTime> ultimos6Meses = Enumerable.Range(0, 6)
+                .Select(i => new DateTime(anhoActual, mesActual, 1).AddMonths(-i))
                 .ToList();
-            var ListadoNroRegistro = new List<ChartData>
-            {
-                new ChartData { y = "enero" , a = 10 , b = 10 },
-                new ChartData { y = "febrero" , a = 65 , b = 0 },
-                new ChartData { y = "marzo" , a = 50 , b = 20 },
-                new ChartData { y = "abril" , a = 75 , b = 20 },
-                new ChartData { y = "mayo" , a = 50 , b = 20 },
-                new ChartData { y = "junio" , a = 75 , b = 20 },
-                new ChartData { y = "julio" , a = 75 , b = 30 },
-                new ChartData { y = "agosto" , a = 75 , b = 40 },
-                new ChartData { y = "septiembre" , a = 75 , b = 100 },
-                new ChartData { y = "octubre" , a = 75 , b = 60 },
-                new ChartData { y = "noviembre" , a = 75 , b = 55 },
-                new ChartData { y = "diciembre" , a = 75 , b = 20 }
-            };
 
-            var ListaNroRegistro = lastSixMonths.Select((date, index) =>
-            {
-                var monthName = date.ToString("MMMM");
-                var manualEntry = ListadoNroRegistro.FirstOrDefault(entry => entry.y == monthName);
-
-                return new ChartData
-                {
-                    y = monthName,
-                    a = manualEntry != null ? manualEntry.a : 0,
-                    b = manualEntry != null ? manualEntry.b : 0
-                };
-            }).Reverse().ToList();
-
-
-            return StatusCode(StatusCodes.Status200OK, ListaNroRegistro);
-
+            // Consulta LINQ para contar registros y obtener mes en formato de texto
+            var resultado = ultimos6Meses
+                .Select(fecha =>
+                    new registrosF_SEG_19
+                    {
+                        mes = fecha.ToString("MMMM", new System.Globalization.CultureInfo("es-ES")),
+                        cantidad = _dbContext.SeguimientoMedicos.Count(x =>
+                            x.MES == fecha.Month.ToString() &&
+                            x.ANHO == fecha.Year.ToString() &&
+                            x.RUC == "2")
+                    }).Reverse()
+                .ToList();
+            return StatusCode(StatusCodes.Status200OK, resultado);
         }
+        
+        //public IActionResult resumenTipoExamen(int? mes, int? anio) {
 
-        public IActionResult resumenTipoExamen(int? mes, int? anio) {
+        //    if (!mes.HasValue)
+        //    {
+        //        mes = DateTime.Now.Month;
+        //    }
 
+        //    // Verificar si el anio es nulo y asignar el valor del anio actual
+        //    if (!anio.HasValue)
+        //    {
+        //        anio = DateTime.Now.Year;
+        //    }
+
+        //    var listaTipoExamenDelMes = ObtenerListaTipoExamenDelMes(mes.ToString(), anio.ToString());
+
+        //   if (listaTipoExamenDelMes.Count == 0)
+        //    {
+        //        var ListadoTipoRegistro = new List<ChartDonut> { new ChartDonut { tipoExamen = "Sin Data", nroTipo = 1 } };
+        //        return StatusCode(StatusCodes.Status200OK, ListadoTipoRegistro);                
+        //    }
+        //    else
+        //    {
+        //        return StatusCode(StatusCodes.Status200OK, listaTipoExamenDelMes);
+        //    }     
+        //}
+
+        //private List<ChartDonut> ObtenerListaTipoExamenDelMes(string? mes, string? anio)
+        //{
+        //    // Consulta LINQ para obtener la lista deseada
+        //    var resultado = from seguimiento in _dbContext.SeguimientoMedicos
+        //                    join tipoExamen in _dbContext.TipoExamenes on seguimiento.ID_TIPO_EXAMEN equals tipoExamen.ID_TIPO
+        //                    where (string.IsNullOrEmpty(mes) || seguimiento.MES == mes) && seguimiento.ANHO == anio
+        //                    group new { tipoExamen } by new { tipoExamen.COD, tipoExamen.DESCRIPCION } into g
+        //                    select new ChartDonut
+        //                    {
+        //                        tipoExamen = g.Key.COD,
+        //                        //DescripcionTipoExamen = g.Key.DESCRIPCION,
+        //                        nroTipo = g.Count() // Cambiado a Count() ya que no proporcionaste un campo específico para sumar
+        //                    };
+
+        //    return resultado.ToList();
+        //}
+
+        public IActionResult resumenTipoExamen(int? mes, int? anio)
+        {
             if (!mes.HasValue)
             {
                 mes = DateTime.Now.Month;
             }
-
-            // Verificar si el anio es nulo y asignar el valor del anio actual
             if (!anio.HasValue)
             {
                 anio = DateTime.Now.Year;
             }
-
             var listaTipoExamenDelMes = ObtenerListaTipoExamenDelMes(mes.ToString(), anio.ToString());
-
-           if (listaTipoExamenDelMes.Count == 0)
+            if (listaTipoExamenDelMes.Count == 0)
             {
-                var ListadoTipoRegistro = new List<ChartDonut> { new ChartDonut { tipoExamen = "Sin Data", nroTipo = 1 } };
-                return StatusCode(StatusCodes.Status200OK, ListadoTipoRegistro);                
+                var ListadoTipoRegistro = new List<ChartTipoExamen> { new ChartTipoExamen { tipoExamen = "Sin Data", nroTipo = 0 } };
+                return StatusCode(StatusCodes.Status200OK, ListadoTipoRegistro);
             }
             else
             {
                 return StatusCode(StatusCodes.Status200OK, listaTipoExamenDelMes);
             }
-            
-
         }
-
-        private List<ChartDonut> ObtenerListaTipoExamenDelMes(string? mes, string? anio)
+        private List<ChartTipoExamen> ObtenerListaTipoExamenDelMes(string? mes, string? anio)
         {
-            // Consulta LINQ para obtener la lista deseada
             var resultado = from seguimiento in _dbContext.SeguimientoMedicos
                             join tipoExamen in _dbContext.TipoExamenes on seguimiento.ID_TIPO_EXAMEN equals tipoExamen.ID_TIPO
-                            where (string.IsNullOrEmpty(mes) || seguimiento.MES == mes) && seguimiento.ANHO == anio
+                            where (string.IsNullOrEmpty(mes) || seguimiento.MES == mes ) && seguimiento.ANHO == anio && seguimiento.RUC == "2"
                             group new { tipoExamen } by new { tipoExamen.COD, tipoExamen.DESCRIPCION } into g
-                            select new ChartDonut
+                            select new ChartTipoExamen
                             {
                                 tipoExamen = g.Key.COD,
-                                //DescripcionTipoExamen = g.Key.DESCRIPCION,
-                                nroTipo = g.Count() // Cambiado a Count() ya que no proporcionaste un campo específico para sumar
+                                nroTipo = g.Count() 
                             };
-
             return resultado.ToList();
         }
-
     }
 }

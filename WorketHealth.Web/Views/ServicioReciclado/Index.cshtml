@@ -1,0 +1,316 @@
+﻿@model WorketHealth.DataAccess.Models.Fecha.Mes
+@{
+    ViewData["Title"] = "Proyecto Servicio de Reciclado";
+}
+<div class="influence-finder">
+    <div class="container-fluid dashboard-content">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form onsubmit="procesarFormulario(); return false;">
+                            <div class="form-group row">
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
+                                    <label class="col-12 col-sm-3 col-form-label text-sm-right">Seleccione un mes</label>
+                                    <div class="col-sm-12 col-lg-12 mb-sm-12">
+                                        <select id="mes" asp-for="Fecha.Month" asp-items="ViewBag.Meses" class="form-control">
+                                            <option value="">Selecciona un mes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
+                                    <label class="col-12 col-sm-3 col-form-label text-sm-right">Seleccione un año</label>
+                                    <div class="col-sm-12 col-lg-12 mb-sm-12">
+                                        <select id="anio" asp-for="Fecha.Year" asp-items="ViewBag.Anhos" class="form-control">
+                                            <option value="">Selecciona un año</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
+                                </div>
+                                <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12" style="text-align:right;">
+                                    <br />
+                                    <button type="submit" class="btn btn-dark">Filtrar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <h5 class="card-header">Registros</h5>
+                    <div class="card-body" style="padding:0px">
+                        <div id="chartNroRegistro"></div>
+                    </div>  
+                </div>
+                <div class="card">
+                    <h5 class="card-header">Aptitudes</h5>
+                    <div class="card-body" style="padding:0px">
+                        <div id="chartNroAptitudes"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h5 class="card-header">Cantidad de Registros (F_SEG_19)</h5>
+                    <div class="card-body" style="padding:0px">
+                        <div id="chartCantidadRegistrosF_SEG_19"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <h5 class="card-header">Tipo de Examen</h5>
+                    <div class="card-body" style="padding:0px">
+                        <div id="chartTipoExamen"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h5 class="card-header">Principales Enfermedades Comunes</h5>
+                    <div class="card-body" style="padding:0px">
+                        <div id="chartNroEC10"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h5 class="card-header">Principales Enfermedades Comunes</h5>
+                    <div class="card-body" style="padding:0px">
+                        <div id="chartEdad"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+    <script>
+        $(document).ready(() => {
+            const fechaActual = new Date();
+            const mesActual = fechaActual.getMonth() + 1;
+            const anioActual = fechaActual.getFullYear();
+
+            console.log("Mes seleccionado:", mesActual);
+            console.log("Año seleccionado:", anioActual);
+
+            resumenNroRegistro(mesActual, anioActual);
+            resumenTipoExamen(mesActual, anioActual);
+            chartNroAptitudes(mesActual, anioActual);
+            chartNroEC10(mesActual, anioActual);
+            resumenF_SEG_19(mesActual, anioActual);
+            resumenEDAD(mesActual, anioActual);
+        })
+
+        function procesarFormulario() {
+            const mesSeleccionado = document.getElementById('mes').value;
+            const anioSeleccionado = document.getElementById('anio').value;
+
+            console.log("Mes seleccionado:", mesSeleccionado);
+            console.log("Año seleccionado:", anioSeleccionado);
+
+            resumenNroRegistro(mesSeleccionado, anioSeleccionado);
+            resumenTipoExamen(mesSeleccionado, anioSeleccionado);
+            chartNroAptitudes(mesSeleccionado, anioSeleccionado);
+            chartNroEC10(mesSeleccionado, anioSeleccionado);
+            resumenF_SEG_19(mesSeleccionado, anioSeleccionado);
+            resumenEDAD(mesSeleccionado, anioSeleccionado);
+        }
+    </script>
+    <script>
+        function resumenNroRegistro(mes, anio) {
+            fetch(`resumenNroRegistro?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {                    
+                    const labels = dataJson.map((item) => { return item.mes })
+                    const valuesB = dataJson.map((item) => { return item.cantidad })
+                    var trace1 = {
+                        x: labels,
+                        y: valuesB,
+                        type: 'scatter'
+                    };
+                    var data = [trace1];
+                    Plotly.newPlot('chartNroRegistro', data);
+                })
+                .catch((error) => {
+                    console.error("---- Ocurrio el error :", error);
+                });
+        }
+        function resumenTipoExamen(mes, anio) {
+            fetch(`resumenTipoExamen?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    const labels = dataJson.map((item) => { return item.tipoExamen })
+                    const values = dataJson.map((item) => { return item.nroTipo })
+                    var data = [{
+                        type: "pie",
+                        values: values,
+                        labels: labels,
+                        textinfo: "label+percent",
+                        textposition: "outside",
+                        hole: .5,
+                        automargin: true,
+                        marker: {   
+                            colors: [
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 99, 132)',
+                                'rgb(139, 230, 41)',
+                                'rgb(186, 82, 232)',
+                                'rgb(234, 133, 73)']
+                        }
+                    }]
+                    var layout = {
+                        margin: { "t": 10, "b": 10, "l": 10, "r": 10 },
+                        showlegend: true
+                    }
+                    Plotly.newPlot('chartTipoExamen', data, layout);
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+        function chartNroAptitudes(mes, anio) {
+            fetch(`resumenAptitud?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    const labels = dataJson.map((item) => { return item.codAptitud })
+                    const values = dataJson.map((item) => { return item.cantidad })
+                    console.log(dataJson);
+                    var data = [{
+                        type: "pie",
+                        values: values,
+                        labels: labels,
+                        textinfo: "label+percent",
+                        textposition: "outside",
+                        hole: .5,
+                        automargin: true,
+                        marker: {
+                            colors: [
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 99, 132)',
+                                'rgb(139, 230, 41)',
+                                'rgb(186, 82, 232)',
+                                'rgb(234, 133, 73)']
+                        }
+                    }]
+                    var layout = {
+                        margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
+                        showlegend: true
+                    }
+                    Plotly.newPlot('chartNroAptitudes', data, layout);
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+        function chartNroEC10(mes, anio) {
+            fetch(`nro10EnfermedadComun?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    const label = dataJson.map((item) => { return item.codEC })
+                    const labels = dataJson.map((item) => { return item.descEC })
+                    const values = dataJson.map((item) => { return item.cantidad }) 
+
+                    var trace1 = {
+                        x: label,
+                        y: values,
+                        type: 'bar',
+                        text: labels,
+                        marker: {
+                            color: 'rgb(234, 133, 73)'
+                        }
+                    };
+
+                    var data = [trace1];
+
+                    Plotly.newPlot('chartNroEC10', data);
+
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+        function resumenF_SEG_19(mes, anio) {
+            fetch(`resumenoF_SEG_19?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    const labels = dataJson.map((item) => { return item.mes })
+                    const values = dataJson.map((item) => { return item.cantidad })
+                    const valuesString = dataJson.map((item) => { return item.cantidad })
+
+                    var data = [{
+                        type: "pie",
+                        values: values,
+                        labels: ["Registros"],
+                        automargin: true,
+                        textinfo: "label+percent",
+                        textposition: "outside",
+                        hole: .4,
+                        marker: {         // marker is an object, valid marker keys: #scatter-marker
+                            colors: ['rgb(186, 82, 232)']// more about "marker.color": #scatter-marker-color
+                        }
+                    }]
+
+                    var layout = {
+                        height: 350,
+                        //  width: 250,
+                        margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
+                        showlegend: true,
+                        annotations: [{
+                            font: { size: 40 },
+                            showarrow: false,
+                            text: String(values),
+                            x: 0.5,
+                            y: 0.5
+                        }],
+                        grid: {
+                            rows: 1
+                        }
+                    }
+
+                    Plotly.newPlot('chartCantidadRegistrosF_SEG_19', data, layout)
+
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+        function resumenEDAD(mes, anio) {
+            fetch(`ObtenerListadoEdades?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    const labels = dataJson.map((item) => { return item.rangoEdad })
+                    const values = dataJson.map((item) => { return item.cantidad })
+
+                    var data = [
+                        {
+                            y: labels,
+                            x: values,
+                            type: 'bar',
+                            orientation: 'h',
+                            marker: {
+                                color: ['rgb(139, 230, 41)', 'rgb(139, 230, 41)', 'rgb(139, 230, 41)', 'rgb(139, 230, 41)', 'rgb(139, 230, 41)']
+                            }
+                        }
+                    ];
+
+                    Plotly.newPlot('chartEdad', data);
+
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+    </script>
+}

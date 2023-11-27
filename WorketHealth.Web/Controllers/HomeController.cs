@@ -5,9 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using WorketHealth.DataAccess;
 using WorketHealth.DataAccess.Models;
+using WorketHealth.DataAccess.Models.Charts;
+using WorketHealth.DataAccess.Models.Personal;
+using WorketHealth.DataAccess.Models.Registros;
 using WorketHealth.DataAccess.Models.Test;
 using WorketHealth.Domain.Interfaces.Fecha;
 using WorketHealth.Services.Services.Empresa;
+
 
 namespace WorketHealth.Web.Controllers {
     public class HomeController : Controller {
@@ -173,7 +177,7 @@ namespace WorketHealth.Web.Controllers {
 
             if (listaTipoExamenDelMes.Count == 0)
             {
-                var ListadoTipoRegistro = new List<ChartDonut> { new ChartDonut { tipoExamen = "Sin Data", nroTipo = 0 } };
+                var ListadoTipoRegistro = new List<ChartTipoExamen> { new ChartTipoExamen { tipoExamen = "Sin Data", nroTipo = 1 } };
                 return StatusCode(StatusCodes.Status200OK, ListadoTipoRegistro);
             }
             else
@@ -182,15 +186,14 @@ namespace WorketHealth.Web.Controllers {
             }
 
         }
-
-        private List<ChartDonut> ObtenerListaTipoExamenDelMes(string? mes, string? anio)
+        private List<ChartTipoExamen> ObtenerListaTipoExamenDelMes(string? mes, string? anio)
         {
             // Consulta LINQ para obtener la lista deseada
             var resultado = from seguimiento in _dbContext.SeguimientoMedicos
                             join tipoExamen in _dbContext.TipoExamenes on seguimiento.ID_TIPO_EXAMEN equals tipoExamen.ID_TIPO
                             where (string.IsNullOrEmpty(mes) || seguimiento.MES == mes) && seguimiento.ANHO == anio
                             group new { tipoExamen } by new { tipoExamen.COD, tipoExamen.DESCRIPCION } into g
-                            select new ChartDonut
+                            select new ChartTipoExamen
                             {
                                 tipoExamen = g.Key.COD,
                                 nroTipo = g.Count() // Cambiado a Count() ya que no proporcionaste un campo específico para sumar
@@ -211,11 +214,11 @@ namespace WorketHealth.Web.Controllers {
             {
                 anio = DateTime.Now.Year;
             }
-            var listaSexoDelMes = ObtenerListaSexoDelMes(mes.ToString(), anio.ToString());
+            var listaSexoDelMes = ObtenerListaSexoDelMes();
 
             if (listaSexoDelMes.Count == 0)
             {
-                var ListadoTipoRegistroSexo = new List<ChartDonut> { new ChartDonut { tipoExamen = "Sin Data", nroTipo = 0 } };
+                var ListadoTipoRegistroSexo = new List<ChartsPersonal> { new ChartsPersonal { genero = "Sin Data", cantidad = 0 } };
                 return StatusCode(StatusCodes.Status200OK, ListadoTipoRegistroSexo);
             }
             else
@@ -224,21 +227,56 @@ namespace WorketHealth.Web.Controllers {
             }
 
         }
-
-        private List<ChartDonut> ObtenerListaSexoDelMes(string? mes, string? anio)
+        private List<ChartsPersonal> ObtenerListaSexoDelMes()
         {
             // Consulta LINQ para obtener la lista deseada
-            var resultado = from seguimiento in _dbContext.SeguimientoMedicos
-                            join tipoExamen in _dbContext.TipoExamenes on seguimiento.ID_TIPO_EXAMEN equals tipoExamen.ID_TIPO
-                            where (string.IsNullOrEmpty(mes) || seguimiento.MES == mes) && seguimiento.ANHO == anio
-                            group new { tipoExamen } by new { tipoExamen.COD, tipoExamen.DESCRIPCION } into g
-                            select new ChartDonut
-                            {
-                                tipoExamen = g.Key.COD,
-                                nroTipo = g.Count() // Cambiado a Count() ya que no proporcionaste un campo específico para sumar
-                            };
+            var resultado = _dbContext.Personal.GroupBy(x => x.Sexo)
+                            .Where(group => group.Count() > 1)
+                            .Select(group => new ChartsPersonal { 
+                                genero = group.Key == "M" ? "Masculino" : (group.Key == "F" ? "Femenino" : "Otros"), 
+                                cantidad = group.Count() })
+                            .ToList();
 
             return resultado.ToList();
         }
+
+        public IActionResult resumenoF_SEG_19(int? mes, int? anio)
+        {
+            if (!mes.HasValue)
+            {
+                mes = DateTime.Now.Month;
+            }
+            // Verificar si el anio es nulo y asignar el valor del anio actual
+            if (!anio.HasValue)
+            {
+                anio = DateTime.Now.Year;
+            }
+
+            var listaF_SEG_19DelMes = ObtenerListaF_SEG_19DelMes(mes.ToString(), anio.ToString());
+
+            if (listaF_SEG_19DelMes.Count == null)
+            {
+                var nuevoElemento = new SeguimientoMedico { MES = mes.ToString(), ANHO = anio.ToString(), Cantidad = 1 };
+                return StatusCode(StatusCodes.Status200OK, new List<SeguimientoMedico> { nuevoElemento });
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, listaF_SEG_19DelMes);
+            }
+        }
+
+        private List<SeguimientoMedico> ObtenerListaF_SEG_19DelMes(string? mes, string? anio)
+        {
+            // Consulta LINQ para obtener la lista deseada
+            var resultado = _dbContext.SeguimientoMedicos
+                            .Where(e => (mes == null || e.MES == mes) && (anio == null || e.ANHO == anio))
+                            .GroupBy(e => new { MES = e.MES, ANHO = e.ANHO })
+                            .Where(group => group.Count() > 1)
+                            .Select(group => new SeguimientoMedico { MES = group.Key.MES, ANHO = group.Key.ANHO, Cantidad = group.Count() })
+                            .ToList();
+
+            return resultado.ToList();
+        }
+
     }
 }

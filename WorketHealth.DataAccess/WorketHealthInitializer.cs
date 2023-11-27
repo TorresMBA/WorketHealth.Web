@@ -69,9 +69,6 @@ namespace WorketHealth.DataAccess
                 var initialDataEnfermedadesProfesionales = new List<EnfermedadProfesional>
                 {
                     new EnfermedadProfesional { COD = "", DESCRIPCION = "Sin Datos" }, // Se evaluara
-                    new EnfermedadProfesional { COD = "CODE1", DESCRIPCION = "PRUEBA1" },// Eliminar - (se usa de prueba)
-                    new EnfermedadProfesional { COD = "CODE2", DESCRIPCION = "PRUEBA2" },// Eliminar - (se usa de prueba)
-                    new EnfermedadProfesional { COD = "CODE3", DESCRIPCION = "PRUEBA3" },// Eliminar - (se usa de prueba)
                     // Agregar más datos aquí
                 };
 
@@ -85,9 +82,6 @@ namespace WorketHealth.DataAccess
                 var initialDataEnfermedadesRelacionadasTrabajo = new List<EnfermedadRelacionadaTrabajo>
                 {
                     new EnfermedadRelacionadaTrabajo { COD = "", DESCRIPCION = "Sin Datos" }, // Se evaluara
-                    new EnfermedadRelacionadaTrabajo { COD = "CODE1", DESCRIPCION = "PRUEBA1" },// Eliminar - (se usa de prueba)
-                    new EnfermedadRelacionadaTrabajo { COD = "CODE2", DESCRIPCION = "PRUEBA2" },// Eliminar - (se usa de prueba)
-                    new EnfermedadRelacionadaTrabajo { COD = "CODE3", DESCRIPCION = "PRUEBA3" },// Eliminar - (se usa de prueba)
                     // Agregar más datos aquí
                 };
 
@@ -101,9 +95,6 @@ namespace WorketHealth.DataAccess
                 var initialDataEnfermedadesRelacionadasTrabajo = new List<EnfermedadRelacionadaTrabajo>
                 {
                     new EnfermedadRelacionadaTrabajo { COD = "", DESCRIPCION = "Sin Datos" }, // Se evaluara
-                    new EnfermedadRelacionadaTrabajo { COD = "CODE1", DESCRIPCION = "PRUEBA1" },// Eliminar - (se usa de prueba)
-                    new EnfermedadRelacionadaTrabajo { COD = "CODE2", DESCRIPCION = "PRUEBA2" },// Eliminar - (se usa de prueba)
-                    new EnfermedadRelacionadaTrabajo { COD = "CODE3", DESCRIPCION = "PRUEBA3" },// Eliminar - (se usa de prueba)
                     // Agregar más datos aquí
                 };
 
@@ -147,7 +138,7 @@ namespace WorketHealth.DataAccess
                 {
                     new Ruc { COD_RUC = 1, NOM_RUC = "Proyecto-Consorcio", DESCRIPCION_RUC = "Proyecto-Consorcio Vial Puquio" }, 
                     new Ruc { COD_RUC = 2, NOM_RUC = "Proyecto Trujillo", DESCRIPCION_RUC = "Proyecto Trujillo" }, 
-                    new Ruc { COD_RUC = 3, NOM_RUC = "Proyecto servicio de Reciclado", DESCRIPCION_RUC = "Proyecto servicio de Reciclado y Recapeo CarreteraPuno -Ilave -Desaguadero Tramo: Puno - Ilave, Ilave - desaguadero" }, 
+                    new Ruc { COD_RUC = 3, NOM_RUC = "Proyecto Servicio de Reciclado", DESCRIPCION_RUC = "Proyecto Servicio de Reciclado y Recapeo CarreteraPuno -Ilave -Desaguadero Tramo: Puno - Ilave, Ilave - desaguadero" }, 
                     new Ruc { COD_RUC = 4, NOM_RUC = "Proyecto Red Vial 6", DESCRIPCION_RUC = "Proyecto Red Vial 6" }, 
                     new Ruc { COD_RUC = 5, NOM_RUC = "Proyecto Piura", DESCRIPCION_RUC = "Proyecto Piura" }, 
                     new Ruc { COD_RUC = 6, NOM_RUC = "Proyecto Coasia", DESCRIPCION_RUC = "Proyecto Coasia" }, 

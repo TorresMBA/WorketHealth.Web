@@ -18,9 +18,12 @@ namespace WorketHealth.DataAccess.Models.Registros
         public string? RESTRICIONES { get; set; }
         public string RUC { get; set; }
         public string MES { get; set; }
-        public string ANHO { get; set; }
+        public string ANHO { get; set; }        
         public ICollection<SeguimientoEnfermedad>? Enfermedades { get; set; } // Relación muchos a muchos con la tabla EnfermedadesComunes
         public ICollection<SeguimientoEnfermedadTrabajo>? EnfermedadesTrabajo { get; set; } // Relación muchos a muchos con la tabla EnfermedadesRelacionadaTrabajo
         public ICollection<SeguimientoEnfermedadProfesional>? EnfermedadesProfesionales { get; set; } // Relación muchos a muchos con la tabla EnfermedadProfecional
+
+        [NotMapped]
+        public int Cantidad { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace WorketHealth.DataAccess.Models.Personal
         public string? Segundo_Apellido { get; set; }
         public DateTime Fec_Nacimiento { get; set; }
         public string? Sexo { get; set; }
+        public string Ruc { get; set; }
     }
 }

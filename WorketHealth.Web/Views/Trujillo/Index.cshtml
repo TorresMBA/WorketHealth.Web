@@ -7,9 +7,6 @@
 <div class="influence-finder">
      <div class="container-fluid dashboard-content">
         <div class="row">
-            <!-- ============================================================== -->
-            <!-- search bar  -->
-            <!-- ============================================================== -->
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="card">
                     <div class="card-body">
@@ -21,13 +18,6 @@
                                                 <select id="mes" asp-for="Fecha.Month" asp-items="ViewBag.Meses" class="form-control">
                                                     <option value="">Selecciona un mes</option>
                                                 </select>
-                                     @*   <select class="form-control" asp -for="MesSeleccionado">
-                                            <option disabled selected>-- Seleccione un Mes --</option>
-                                            @foreach (var mes in Model.ListaMes)
-                                                {
-                                                    <option value="@mes.Value" selected="@((mes.Value == ViewBag.MesActual))">@mes.Text</option>
-                                                }
-                                        </select>*@
                                      </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
@@ -36,13 +26,6 @@
                                             <select id="anio" asp-for="Fecha.Year" asp-items="ViewBag.Anhos" class="form-control">
                                                 <option value="">Selecciona un año</option>
                                             </select>
-                                        @*<select class="form-control" asp-for="AnhoSeleccionado">
-                                            <option disabled selected>-- Seleccione un Año --</option>
-                                            @foreach (var anho in Model.ListaAnho)
-                                            {
-                                                <option value="@anho.Value" selected="@((anho.Value == ViewBag.AñoActual))">@anho.Text</option>
-                                            }
-                                        </select>*@
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12">
@@ -55,10 +38,7 @@
                         </form>
                     </div>
                 </div>                
-            </div>
-            <!-- ============================================================== -->
-            <!-- end search bar  -->
-            <!-- ============================================================== -->            
+            </div>           
         </div>
         <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -70,8 +50,9 @@
                 </div>
                 <div class="card">
                     <h5 class="card-header">Registros</h5>
-                    <div class="card-body" style="display: flex;">
-                        <canvas id="chartNroRegistros2"></canvas>
+                    <div class="card-body" style="padding:0px">
+                        @* <canvas id="chartNroRegistros2"></canvas> *@
+                        <div id="chartNroRegistro"></div>
                     </div>
                 </div>
             </div>
@@ -79,28 +60,56 @@
 
                 <div class="card">
                     <h5 class="card-header">Tipo de Examen</h5>
-                    <div class="card-body" style="display: flex; ">
-                        <canvas id="chartTipoExamen"></canvas>
+                    <div class="card-body">
+                        <div id="chartTipoExamen"></div>
                     </div>
                 </div>
+
             </div>
     </div>
 </div>
 @section Scripts{
-    <script>
-        function resumenNroRegistros(){
-            fetch("resumenNroRegistro")
+   <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
+   <script>
+       function resumenNroRegistro(mes, anio) {
+           fetch(`resumenNroRegistro?mes=${mes}&anio=${anio}`)
+               .then((response) => {
+                   return response.ok ? response.json() : Promise.reject(response);
+               })
+               .then((dataJson) => {
+                   console.log(dataJson);
+                   const labels = dataJson.map((item) => { return item.mes })
+                   const valuesB = dataJson.map((item) => { return item.cantidad })
+
+                   var trace1 = {
+                       x: labels,
+                       y: valuesB,
+                       type: 'scatter'
+                   };
+
+                   var data = [trace1];
+                        Plotly.newPlot('chartNroRegistro', data);
+
+               })
+               .catch((error) => {
+                   console.error("---- Ocurrio el error :", error);
+               });
+       }
+   
+   </script>
+   <script>
+        function resumenNroRegistros(mes, anio) {
+                fetch(`resumenNroRegistro?mes=${mes}&anio=${anio}`)
                 .then((response) => {
                     return response.ok ? response.json() : Promise.reject(response);
                 })
                 .then((dataJson) => {
-
-                    const labels = dataJson.map((item) => {return item.y})
-                    const valuesA = dataJson.map((item) => {return item.a})
-                    const valuesB = dataJson.map((item) => {return item.b})
-
-
-
+                        console.log(dataJson);
+                    //const labels = dataJson.map((item) => {return item.y})
+                    //const valuesA = dataJson.map((item) => {return item.a})
+                    //const valuesB = dataJson.map((item) => {return item.b})
+                    const labels = dataJson.map((item) => { return item.mes })
+                    const valuesB = dataJson.map((item) => {return item.cantidad})
                     const data = {
                         labels: labels,
                         datasets: [{
@@ -110,7 +119,6 @@
                             fill: false,
                         }]
                     };
-
                     const config = {
                         type: 'line',
                         data: data,
@@ -122,144 +130,179 @@
                             }
                         }
                     };
-
                     const canvas = document.getElementById('chartNroRegistros');
                     const ctx = canvas.getContext('2d');
-                    new Chart(ctx, config);
-                    
-     
-                })
-                .catch((error) => {
-                    console.error("---- Ocurrio el error :", error);
-                });
-        }
-        function resumenNroRegistros2() {
-            fetch("resumenNroRegistro")
-                .then((response) => {
-                    return response.ok ? response.json() : Promise.reject(response);
-                })
-                .then((dataJson) => {
-
-                    const labels = dataJson.map((item) => { return item.y })
-                    const valuesA = dataJson.map((item) => { return item.a })
-                    const valuesB = dataJson.map((item) => { return item.b })
-
-
-
-                    const data = {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Registros Mensuales',
-                            data: valuesB,
-                            borderColor: 'rgb(75, 192, 192)',
-                            fill: false,
-                        }]
-                    };
-
-                    const config = {
-                        type: 'line',
-                        data: data,
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    };
-
-                    const canvas = document.getElementById('chartNroRegistros2');
-                    const ctx = canvas.getContext('2d');
-                    new Chart(ctx, config);
-
-
-                })
-                .catch((error) => {
-                    console.error("---- Ocurrio el error :", error);
-                });
-        }
-        function resumenTipoExamen(mes, anio) {
-
-                fetch(`resumenTipoExamen?mes=${mes}&anio=${anio}`)
-                .then((response) => {
-                    return response.ok ? response.json() : Promise.reject(response);
-                })
-                .then((dataJson) => {
-                    console.log(dataJson);
-
-                    const labels = dataJson.map((item) => { return item.tipoExamen })
-                    const values = dataJson.map((item) => { return item.nroTipo })
-
-                    console.log(labels);
-                    console.log(values);
-
-                    const data = {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Tipo de Examen',
-                            data: values,
-                            backgroundColor: [
-                                'rgb(255, 99, 132)',
-                                'rgb(54, 162, 235)',
-                                'rgb(255, 205, 86)',
-                                'rgb(139, 230, 41)',
-                                'rgb(186, 82, 232)',
-                                'rgb(234, 133, 73)'
-                            ],
-                        }]
-                    };
-
-                    const config = {
-                        type: 'doughnut',
-                        data: data,
-                    };
-
-                    const canvas = document.getElementById('chartTipoExamen');
-                    const ctx = canvas.getContext('2d');
-
-                    // Destruir el gráfico existente si ya existe
-            if (window.myDoughnutChart) {
-                window.myDoughnutChart.destroy();
-            }
-                        window.myDoughnutChart = new Chart(ctx, config);
                    // new Chart(ctx, config);
 
-
+                    // Destruir el gráfico existente si ya existe
+                        if (window.myDoughnutChartRegistros) {
+                            window.myDoughnutChartRegistros.destroy();
+                        }
+                        window.myDoughnutChartRegistros = new Chart(ctx, config);
                 })
                 .catch((error) => {
                     console.error("---- Ocurrio el error :", error);
                 });
         }
 
-       
+        function resumenTipoExamen(mes, anio) {
+            fetch(`resumenTipoExamen?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    //         console.log(dataJson);
+                    const labels = dataJson.map((item) => { return item.tipoExamen })
+                    const values = dataJson.map((item) => { return item.nroTipo })
+                    var data = [{
+                        type: "pie",
+                        values: values,
+                        labels: labels,
+                        textinfo: "label+percent",
+                        textposition: "outside",
+                        hole: .5,
+                        automargin: true,
+                        marker: {         // marker is an object, valid marker keys: #scatter-marker
+                            colors: [
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 99, 132)',
+                                'rgb(139, 230, 41)',
+                                'rgb(186, 82, 232)',
+                                'rgb(234, 133, 73)']
+                        }
+                    }]
 
+                    var layout = {
+                        //height: 350,
+                        // width: 400,
+                        margin: { "t": 10, "b": 10, "l": 10, "r": 10 },
+                        showlegend: true
+                    }
+
+                    Plotly.newPlot('chartTipoExamen', data, layout)
+
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+        //// // function reumenNroRegistros2() {
+        //     fetch("resumenNroRegistro")
+        //         .then((response) => {
+        //             return response.ok ? response.json() : Promise.reject(response);
+        //         })
+        //         .then((dataJson) => {
+        //             const labels = dataJson.map((item) => { return item.y })
+        //             const valuesA = dataJson.map((item) => { return item.a })
+        //             const valuesB = dataJson.map((item) => { return item.b })
+        //             const data = {
+        //                 labels: labels,
+        //                 datasets: [{
+        //                     label: 'Registros Mensuales',
+        //                     data: valuesB,
+        //                     borderColor: 'rgb(75, 192, 192)',
+        //                     fill: false,
+        //                 }]
+        //             };
+        //             const config = {
+        //                 type: 'line',
+        //                 data: data,
+        //                 options: {
+        //                     scales: {
+        //                         y: {
+        //                             beginAtZero: true
+        //                         }
+        //                     }
+        //                 }
+        //             };
+        //             const canvas = document.getElementById('chartNroRegistros2');
+        //             const ctx = canvas.getContext('2d');
+        //             new Chart(ctx, config);
+        //         })
+        //         .catch((error) => {
+        //             console.error("---- Ocurrio el error :", error);
+        //         });
+        // }
+        // function resumenTipoExamen(mes, anio) {
+
+        //         fetch(`resumenTipoExamen?mes=${mes}&anio=${anio}`)
+        //         .then((response) => {
+        //             return response.ok ? response.json() : Promise.reject(response);
+        //         })
+        //         .then((dataJson) => {
+        //             console.log(dataJson);
+
+        //             const labels = dataJson.map((item) => { return item.tipoExamen })
+        //             const values = dataJson.map((item) => { return item.nroTipo })
+
+        //             console.log(labels);
+        //             console.log(values);
+
+        //             const data = {
+        //                 labels: labels,
+        //                 datasets: [{
+        //                     label: 'Tipo de Examen',
+        //                     data: values,
+        //                     backgroundColor: [
+        //                         'rgb(255, 99, 132)',
+        //                         'rgb(54, 162, 235)',
+        //                         'rgb(255, 205, 86)',
+        //                         'rgb(139, 230, 41)',
+        //                         'rgb(186, 82, 232)',
+        //                         'rgb(234, 133, 73)'
+        //                     ],
+        //                 }]
+        //             };
+
+        //             const config = {
+        //                 type: 'doughnut',
+        //                 data: data,
+        //             };
+
+        //             const canvas = document.getElementById('chartTipoExamen');
+        //             const ctx = canvas.getContext('2d');
+
+        //             Destruir el gráfico existente si ya existe
+        //     if (window.myDoughnutChart) {
+        //         window.myDoughnutChart.destroy();
+        //     }
+        //                 window.myDoughnutChart = new Chart(ctx, config);
+        //            new Chart(ctx, config);
+
+
+        //         })
+        //         .catch((error) => {
+        //             console.error("---- Ocurrio el error :", error);
+        //         });
+        // }
+         
         $(document).ready(() => {
                 // Obtener el mes y el año actuales
                 const fechaActual = new Date();
                 const mesActual = fechaActual.getMonth() + 1; // Los meses en JavaScript son indexados desde 0
                 const anioActual = fechaActual.getFullYear();
 
-            resumenNroRegistros();
-            resumenNroRegistros2();
-            resumenTipoExamen(mesActual, anioActual);
+                resumenNroRegistros(mesActual, anioActual);
+                resumenNroRegistro(mesActual, anioActual);
+                resumenTipoExamen(mesActual, anioActual);
+            // resumenNroRegistros2();
+            // resumenTipoExamen(mesActual, anioActual);
         })
     </script>
-        <script>
-            // Definir la función que quieres llamar desde el formulario
-            function procesarFormulario() {
-                // Obtener los valores seleccionados
-                const mesSeleccionado = document.getElementById('mes').value;
-                const anioSeleccionado = document.getElementById('anio').value;
 
-                // Lógica adicional con los valores seleccionados
-                console.log("Mes seleccionado:", mesSeleccionado);
-                console.log("Año seleccionado:", anioSeleccionado);
+    <script>
 
-                // Llamar a tu función resumenTipoExamen con los valores seleccionados
-                resumenTipoExamen(mesSeleccionado, anioSeleccionado);
+        function procesarFormulario() {
+            const mesSeleccionado = document.getElementById('mes').value;
+            const anioSeleccionado = document.getElementById('anio').value;
 
-                // Aquí puedes agregar lógica adicional antes de enviar el formulario, si es necesario.
-            }
-        </script>
+            console.log("Mes seleccionado:", mesSeleccionado);
+            console.log("Año seleccionado:", anioSeleccionado);
+
+            resumenNroRegistros(mesSeleccionado, anioSeleccionado);
+            resumenNroRegistro(mesSeleccionado, anioSeleccionado);
+            resumenTipoExamen(mesSeleccionado, anioSeleccionado);
+        }
+    </script>
        
 }
