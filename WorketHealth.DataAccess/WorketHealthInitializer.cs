@@ -40,8 +40,8 @@ namespace WorketHealth.DataAccess
             {
                 // Crear usuarios
                 CreateUser(userManager, "Administrador", "Administrador@example.com", "Qwer@123?", "Administrador");
-                CreateUser(userManager, "Desarrollador1", "Desarrollador1@example.com", "Qwer@123?", "Administrador");
-                CreateUser(userManager, "Desarrollador2", "Desarrollador2@example.com", "Qwer@123?", "Administrador");
+                CreateUser(userManager, "Desarrollador1", "Desarrollador1@example.com", "Qwer@123?", "Desarrollador");
+                CreateUser(userManager, "Desarrollador2", "Desarrollador2@example.com", "Qwer@123?", "Desarrollador");
             }
           
             // Verificar si ya existen datos

@@ -6,6 +6,13 @@
     <div class="container-fluid dashboard-content">
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="page-header">
+                    <h2 class="pageheader-title">Proyecto Servicio de Reciclado</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="card">
                     <div class="card-body">
                         <form onsubmit="procesarFormulario(); return false;">
@@ -73,7 +80,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <h5 class="card-header">Principales Enfermedades Comunes</h5>
+                    <h5 class="card-header">Edades</h5>
                     <div class="card-body" style="padding:0px">
                         <div id="chartEdad"></div>
                     </div>
@@ -199,7 +206,7 @@
                         }
                     }]
                     var layout = {
-                        margin: { "t": 0, "b": 0, "l": 0, "r": 0 },
+                        margin: { "t": 10, "b": 10, "l": 10, "r": 10 },
                         showlegend: true
                     }
                     Plotly.newPlot('chartNroAptitudes', data, layout);

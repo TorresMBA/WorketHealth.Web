@@ -84,9 +84,9 @@ namespace WorketHealth.Web.Controllers.Proyectos
             return resultado.ToList();
         }
 
-        public IActionResult resumenAptitud(int? mes, int? anio)
+        public IActionResult resumenAptitud(string? mes, string? anio)
         {
-            var listaTipoExamenDelMes = ObtenerListaAptitudDelMes(mes.ToString(), anio.ToString());
+            var listaTipoExamenDelMes = ObtenerListaAptitudDelMes(mes, anio);
             if (listaTipoExamenDelMes.Count == 0)
             {
                 var ListadoTipoRegistro = new List<ChartAptitud> { new ChartAptitud { codAptitud = "Sin Data", cantidad = 0 } };
@@ -127,18 +127,33 @@ namespace WorketHealth.Web.Controllers.Proyectos
         private List<ChartEC10> ObtenerLista10ECDelMes(string? mes, string? anio)
         {
             var resultado = _dbContext.SeguimientoMedicos
-                            .Where(r => (mes == null || r.MES == mes) && (anio == null || r.ANHO == anio) && r.RUC == "3")
+                            .Where(r => (string.IsNullOrEmpty(mes) || r.MES == mes) && (string.IsNullOrEmpty(anio) || r.ANHO == anio) &&
+                                        r.RUC == "3")
                             .SelectMany(r => r.Enfermedades)
-                            .GroupBy(EnfermedadComun => new { EnfermedadComun.EnfermedadComun.COD, EnfermedadComun.EnfermedadComun.DESCRIPCION })
+                            .GroupBy(ec => new { ec.EnfermedadComun.COD, ec.EnfermedadComun.DESCRIPCION })
                             .Select(group => new ChartEC10
                             {
                                 codEC = group.Key.COD,
                                 descEC = group.Key.DESCRIPCION,
                                 cantidad = group.Count()
                             })
-                            .OrderByDescending(ChartEC10 => ChartEC10.cantidad)
+                            .OrderByDescending(chartEC10 => chartEC10.cantidad)
                             .Take(10)
                             .ToList();
+
+                            // Asignar la cantidad al objeto SeguimientoMedico
+                            foreach (var item in resultado)
+                            {
+                                // Encuentra el SeguimientoMedico correspondiente y asigna la cantidad
+                                var seguimientoMedico = _dbContext.SeguimientoMedicos
+                                .FirstOrDefault(r => r.Enfermedades.Any(ec => ec.EnfermedadComun.COD == item.codEC));
+
+
+                                if (seguimientoMedico != null)
+                                {
+                                    seguimientoMedico.Cantidad = item.cantidad;
+                                }
+                            }
             return resultado.ToList();
         }
 
@@ -204,7 +219,7 @@ namespace WorketHealth.Web.Controllers.Proyectos
                 new ChartsEdades { rangoEdad = "Edad 26-35 ", cantidad = edades.Count(e => e >= 26 && e <= 35) },
                 new ChartsEdades { rangoEdad = "Edad 36-45 ", cantidad = edades.Count(e => e >= 36 && e <= 45) },
                 new ChartsEdades { rangoEdad = "Edad 46-55 ", cantidad = edades.Count(e => e >= 46 && e <= 55) },
-                new ChartsEdades { rangoEdad = "Edad 56-100 ", cantidad = edades.Count(e => e >= 56 && e <= 100) }
+                new ChartsEdades { rangoEdad = "Edad 56-99 ", cantidad = edades.Count(e => e >= 56 && e <= 100) }
             };
             return StatusCode(StatusCodes.Status200OK, resultado);
             

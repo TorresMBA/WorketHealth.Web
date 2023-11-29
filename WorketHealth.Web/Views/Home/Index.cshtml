@@ -85,6 +85,7 @@
                         <div id='chartTipoExamen'></div>
                     </div>
                 </div>
+                            
             </div>
 
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
@@ -97,6 +98,7 @@
                         <div id='chartSexo'></div>
                     </div>
                 </div>
+                
             </div>
 
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
@@ -106,6 +108,38 @@
                         <div id='chartCantidadRegistrosF_SEG_19'></div>
                     </div>
                 </div>
+            
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-8 col-sm-12 col-12">
+                <div class="card">
+                    <h5 class="card-header">Aptitudes</h5>
+                    <div class="card-body" style="padding:0px">
+                        <div id="chartNroAptitudes"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+                <div class="card">
+                    <h5 class="card-header">Principales Enfermedades Comunes</h5>
+                    <div class="card-body" style="padding:0px">
+                        <div id="chartNroEC10"></div>
+                    </div>
+                </div>
+            </div>
+         </div>
+
+        <div class="row">
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+                <div class="card">
+                    <h5 class="card-header">Edades</h5>
+                    <div class="card-body" style="padding:0px">
+                        <div id='chartEdad'></div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -115,16 +149,36 @@
     <script src='https://cdn.plot.ly/plotly-2.27.0.min.js'></script>
     <script>
         $(document).ready(() => {
-            // Obtener el mes y el año actuales
             const fechaActual = new Date();
-            const mesActual = fechaActual.getMonth() + 1; // Los meses en JavaScript son indexados desde 0
+            const mesActual = fechaActual.getMonth() + 1;
             const anioActual = fechaActual.getFullYear();
 
             resumenTipoExamen(mesActual, anioActual);
             resumenSexo(mesActual, anioActual);
             resumenF_SEG_19(mesActual, anioActual);
+            chartNroAptitudes(mesActual, anioActual);
+            chartNroEC10(mesActual, anioActual);
+            resumenEDAD(mesActual, anioActual);
+
         })
 
+        function procesarFormulario() {
+            const mesSeleccionado = document.getElementById('mes').value;
+            const anioSeleccionado = document.getElementById('anio').value;
+
+            console.log("Mes seleccionado:", mesSeleccionado);
+            console.log("Año seleccionado:", anioSeleccionado);
+
+            resumenTipoExamen(mesSeleccionado, anioSeleccionado);
+            resumenSexo(mesSeleccionado, anioSeleccionado);
+            resumenF_SEG_19(mesSeleccionado, anioSeleccionado);
+            chartNroAptitudes(mesSeleccionado, anioSeleccionado);
+            chartNroEC10(mesSeleccionado, anioSeleccionado);
+            resumenEDAD(mesSeleccionado, anioSeleccionado);
+
+        }
+    </script>
+    <script>
         function resumenTipoExamen(mes, anio) { 
             fetch(`resumenTipoExamen?mes=${mes}&anio=${anio}`)
                 .then((response) => {
@@ -312,24 +366,109 @@
                     console.error("Consola error :", error);
                 });
               }
-    </script>
-    <script>
-        // Definir la función que quieres llamar desde el formulario
-        function procesarFormulario() {
-            // Obtener los valores seleccionados
-            const mesSeleccionado = document.getElementById('mes').value;
-            const anioSeleccionado = document.getElementById('anio').value;
+        function chartNroAptitudes(mes, anio) {
+            fetch(`resumenAptitud?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    const labels = dataJson.map((item) => { return item.codAptitud })
+                    const values = dataJson.map((item) => { return item.cantidad })
+                    console.log(dataJson);
+                    var data = [{
+                        type: "pie",
+                        values: values,
+                        labels: labels,
+                        //textinfo: "label+percent",
+                        textposition: "outside",
+                        hole: .5,
+                        automargin: true,
+                        marker: {         // marker is an object, valid marker keys: #scatter-marker
+                            colors: ['rgb(54, 162, 235)',
+                                'rgb(255, 99, 132)',
+                                'rgb(139, 230, 41)',
+                                'rgb(186, 82, 232)',
+                                'rgb(234, 133, 73)']
+                        }
+                    }]
 
-            // Lógica adicional con los valores seleccionados
-            console.log("Mes seleccionado:", mesSeleccionado);
-            console.log("Año seleccionado:", anioSeleccionado);
-
-            // Llamar a tu función resumenTipoExamen con los valores seleccionados
-            resumenTipoExamen(mesSeleccionado, anioSeleccionado);
-            resumenSexo(mesSeleccionado, anioSeleccionado);
-            resumenF_SEG_19(mesSeleccionado, anioSeleccionado);
-
-            // Aquí puedes agregar lógica adicional antes de enviar el formulario, si es necesario.
+                    var layout = {
+                        height: 391,
+                        // width: 400,
+                        margin: { "t": 10, "b": 10, "l": 10, "r": 10 },
+                        showlegend: true
+                    }
+                    Plotly.newPlot('chartNroAptitudes', data, layout);
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
         }
+        function chartNroEC10(mes, anio) {
+            fetch(`nro10EnfermedadComun?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    const label = dataJson.map((item) => { return item.codEC })
+                    const labels = dataJson.map((item) => { return item.descEC })
+                    const values = dataJson.map((item) => { return item.cantidad })
+
+                    var trace1 = {
+                        x: label,
+                        y: values,
+                        type: 'bar',
+                        text: labels,
+                        marker: {
+                            color: 'rgb(234, 133, 73)'
+                        }
+                    };
+
+                    var layout = {
+                        height: 391
+                    }
+
+                    var data = [trace1];
+
+                    Plotly.newPlot('chartNroEC10', data, layout);
+
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+        function resumenEDAD(mes, anio) {
+            fetch(`ObtenerListadoEdades?mes=${mes}&anio=${anio}`)
+                .then((response) => {
+                    return response.ok ? response.json() : Promise.reject(response);
+                })
+                .then((dataJson) => {
+                    const labels = dataJson.map((item) => { return item.rangoEdad })
+                    const values = dataJson.map((item) => { return item.cantidad })
+
+                    var data = [
+                        {
+                            y: labels,
+                            x: values,
+                            type: 'bar',
+                            orientation: 'h',
+                            marker: {
+                                color: ['rgb(139, 230, 41)', 'rgb(139, 230, 41)', 'rgb(139, 230, 41)', 'rgb(139, 230, 41)', 'rgb(139, 230, 41)']
+                            }
+                        }
+                    ];
+                    var layout = {
+                        height: 391,
+                        margin: 0
+                    }
+
+                    Plotly.newPlot('chartEdad', data, layout);
+
+                })
+                .catch((error) => {
+                    console.error("Consola error :", error);
+                });
+        }
+
     </script>
   }

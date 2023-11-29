@@ -11,5 +11,8 @@ namespace WorketHealth.DataAccess.Models.Registros
         public int EnfermedadComunId { get; set; }
         public EnfermedadComun EnfermedadComun { get; set; }
 
+        [NotMapped]
+        public int CantidadEnfermedadesComunes { get; set; }
+
     }
 }

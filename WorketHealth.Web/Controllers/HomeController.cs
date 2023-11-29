@@ -34,6 +34,7 @@ namespace WorketHealth.Web.Controllers {
             _anhoService = anhoService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             ViewBag.Anhos = _anhoService.GetAnhos();
@@ -45,60 +46,9 @@ namespace WorketHealth.Web.Controllers {
         [AllowAnonymous]
         public async Task<IActionResult> Login()
         {
-            // Para la cracion de los roles
-         //  // if (!await _roleManager.RoleExistsAsync("Administrador"))
-         //  // {
-         //  //     //Creacion de rol administrador
-         //  //     await _roleManager.CreateAsync(new IdentityRole("Administrador"));
-         //  //
-         //  //
-         //  //     //Creacion de Usuarios
-         //  //     await CreateUserAndAssignRole(_userManager, "Administrador", "Administrador@example.com", "Qwer@123?", "Administrador");
-         //  //     await CreateUserAndAssignRole(_userManager, "Desarrollador1", "Desarrollador1@example.com", "Qwer@123?", "Administrador");
-         //  //     await CreateUserAndAssignRole(_userManager, "Desarrollador2", "Desarrollador2@example.com", "Qwer@123?", "Administrador");
-         //  //
-         //  //
-         //  // }
-         //  // if (!await _roleManager.RoleExistsAsync("Desarrollador"))
-         //  // {
-         //  //     //Creacion de rol administrador
-         //  //     await _roleManager.CreateAsync(new IdentityRole("Desarrollador"));
-         //  // }
-         //  // if (!await _roleManager.RoleExistsAsync("Visitante"))
-         //  // {
-         //  //     //Creacion de rol administrador
-         //  //     await _roleManager.CreateAsync(new IdentityRole("Visitante"));
-         //  // }
-         //  // if (!await _roleManager.RoleExistsAsync("Registrado"))
-         //  // {
-         //  //     //Creacion de rol usuario registrado
-         //  //     await _roleManager.CreateAsync(new IdentityRole("Registrado"));
-         //  // }
-
             return View();
         }
-        private async Task CreateUserAndAssignRole(UserManager<AppUsuario> userManager, string username, string email, string password, string roleName)
-        {
-            if (userManager.FindByNameAsync(username).Result == null)
-            {
-                // Crear usuario
-                var user = new AppUsuario
-                {
-                    UserName = username.Replace(" ", ""),
-                    Email = email
-                };
-
-                var result = await _userManager.CreateAsync(user, password);
-
-                if (result.Succeeded)
-                {
-                    // Asignar el rol al usuario
-                    await _userManager.AddToRoleAsync(user, roleName);
-                }
-            }
-        }
-
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(Models.AccesoViewModel accViewModel)
@@ -125,7 +75,8 @@ namespace WorketHealth.Web.Controllers {
                     {
                         // Aquí puedes usar los roles de alguna manera
                         // Puedes almacenarlos en una variable o mostrarlos en la vista, por ejemplo
-                        TempData["UserRole"] = string.Join(", ", roles);
+                                TempData["UserRole"] = string.Join(", ", roles);
+                       
                     }
                     return RedirectToAction("Index", "Home");
                 }
@@ -161,19 +112,10 @@ namespace WorketHealth.Web.Controllers {
             return View();
         }
 
-
-        public IActionResult resumenTipoExamen(int? mes, int? anio)
+        // ---------------- Datos de Grafico ------------------
+        public IActionResult resumenTipoExamen(string? mes, string? anio)
         {
-            if (!mes.HasValue)
-            {
-                mes = DateTime.Now.Month;
-            }
-            // Verificar si el anio es nulo y asignar el valor del anio actual
-            if (!anio.HasValue)
-            {
-                anio = DateTime.Now.Year;
-            }
-            var listaTipoExamenDelMes = ObtenerListaTipoExamenDelMes(mes.ToString(), anio.ToString());
+            var listaTipoExamenDelMes = ObtenerListaTipoExamenDelMes(mes, anio);
 
             if (listaTipoExamenDelMes.Count == 0)
             {
@@ -191,7 +133,7 @@ namespace WorketHealth.Web.Controllers {
             // Consulta LINQ para obtener la lista deseada
             var resultado = from seguimiento in _dbContext.SeguimientoMedicos
                             join tipoExamen in _dbContext.TipoExamenes on seguimiento.ID_TIPO_EXAMEN equals tipoExamen.ID_TIPO
-                            where (string.IsNullOrEmpty(mes) || seguimiento.MES == mes) && seguimiento.ANHO == anio
+                            where (string.IsNullOrEmpty(mes) || seguimiento.MES == mes) && (anio == null || seguimiento.ANHO == anio)
                             group new { tipoExamen } by new { tipoExamen.COD, tipoExamen.DESCRIPCION } into g
                             select new ChartTipoExamen
                             {
@@ -202,18 +144,8 @@ namespace WorketHealth.Web.Controllers {
             return resultado.ToList();
         }
 
-
-        public IActionResult resumenSexo(int? mes, int? anio)
-        {
-            if (!mes.HasValue)
-            {
-                mes = DateTime.Now.Month;
-            }
-            // Verificar si el anio es nulo y asignar el valor del anio actual
-            if (!anio.HasValue)
-            {
-                anio = DateTime.Now.Year;
-            }
+        public IActionResult resumenSexo(string? mes, string? anio)
+        {           
             var listaSexoDelMes = ObtenerListaSexoDelMes();
 
             if (listaSexoDelMes.Count == 0)
@@ -240,23 +172,13 @@ namespace WorketHealth.Web.Controllers {
             return resultado.ToList();
         }
 
-        public IActionResult resumenoF_SEG_19(int? mes, int? anio)
+        public IActionResult resumenoF_SEG_19(string? mes, string? anio)
         {
-            if (!mes.HasValue)
-            {
-                mes = DateTime.Now.Month;
-            }
-            // Verificar si el anio es nulo y asignar el valor del anio actual
-            if (!anio.HasValue)
-            {
-                anio = DateTime.Now.Year;
-            }
-
-            var listaF_SEG_19DelMes = ObtenerListaF_SEG_19DelMes(mes.ToString(), anio.ToString());
+            var listaF_SEG_19DelMes = ObtenerListaF_SEG_19DelMes(mes, anio);
 
             if (listaF_SEG_19DelMes.Count == null)
             {
-                var nuevoElemento = new SeguimientoMedico { MES = mes.ToString(), ANHO = anio.ToString(), Cantidad = 1 };
+                var nuevoElemento = new SeguimientoMedico { MES = mes, ANHO = anio, Cantidad = 1 };
                 return StatusCode(StatusCodes.Status200OK, new List<SeguimientoMedico> { nuevoElemento });
             }
             else
@@ -264,7 +186,6 @@ namespace WorketHealth.Web.Controllers {
                 return StatusCode(StatusCodes.Status200OK, listaF_SEG_19DelMes);
             }
         }
-
         private List<SeguimientoMedico> ObtenerListaF_SEG_19DelMes(string? mes, string? anio)
         {
             // Consulta LINQ para obtener la lista deseada
@@ -278,5 +199,128 @@ namespace WorketHealth.Web.Controllers {
             return resultado.ToList();
         }
 
+        public IActionResult resumenAptitud(string? mes, string? anio)
+        {
+            var listaTipoExamenDelMes = ObtenerListaAptitudDelMes(mes, anio);
+            if (listaTipoExamenDelMes.Count == 0)
+            {
+                var ListadoTipoRegistro = new List<ChartAptitud> { new ChartAptitud { codAptitud = "Sin Data", cantidad = 0 } };
+                return StatusCode(StatusCodes.Status200OK, ListadoTipoRegistro);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, listaTipoExamenDelMes);
+            }
+        }
+        private List<ChartAptitud> ObtenerListaAptitudDelMes(string? mes, string? anio)
+        {
+            var resultado = from seguimiento in _dbContext.SeguimientoMedicos
+                            join tipoExamen in _dbContext.Aptitudes on seguimiento.ID_TIPO_EXAMEN equals tipoExamen.ID_APTITUD
+                            where (string.IsNullOrEmpty(mes) || seguimiento.MES == mes) && (anio == null || seguimiento.ANHO == anio)
+                            group new { tipoExamen } by new { tipoExamen.COD, tipoExamen.DESCRIPCION } into g
+                            select new ChartAptitud
+                            {
+                                codAptitud = g.Key.COD,
+                                cantidad = g.Count()
+                            };
+            return resultado.ToList();
+        }
+
+        public IActionResult nro10EnfermedadComun(string? mes, string? anio)
+        {
+            var listaTipoExamenDelMes = ObtenerLista10ECDelMes(mes, anio);
+            if (listaTipoExamenDelMes.Count == 0)
+            {
+                var ListadoTipoRegistro = new List<ChartEC10> { new ChartEC10 { codEC = "Sin Data", descEC = "Sin Data", cantidad = 0 } };
+                return StatusCode(StatusCodes.Status200OK, ListadoTipoRegistro);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status200OK, listaTipoExamenDelMes);
+            }
+        }
+        private List<ChartEC10> ObtenerLista10ECDelMes(string? mes, string? anio)
+        {
+            var resultado = _dbContext.SeguimientoMedicos
+                            .Where(r => (string.IsNullOrEmpty(mes) || r.MES == mes) && (string.IsNullOrEmpty(anio) || r.ANHO == anio))
+                            .SelectMany(r => r.Enfermedades)
+                            .GroupBy(ec => new { ec.EnfermedadComun.COD, ec.EnfermedadComun.DESCRIPCION })
+                            .Select(group => new ChartEC10
+                            {
+                                codEC = group.Key.COD,
+                                descEC = group.Key.DESCRIPCION,
+                                cantidad = group.Count()
+                            })
+                            .OrderByDescending(chartEC10 => chartEC10.cantidad)
+                            .Take(10)
+                            .ToList();
+
+            // Asignar la cantidad al objeto SeguimientoMedico
+            foreach (var item in resultado)
+            {
+                // Encuentra el SeguimientoMedico correspondiente y asigna la cantidad
+                var seguimientoMedico = _dbContext.SeguimientoMedicos
+                .FirstOrDefault(r => r.Enfermedades.Any(ec => ec.EnfermedadComun.COD == item.codEC));
+
+
+                if (seguimientoMedico != null)
+                {
+                    seguimientoMedico.Cantidad = item.cantidad;
+                }
+            }
+            return resultado.ToList();
+        }
+
+        public IActionResult ObtenerListadoEdades(string? mes, string? anio)
+        {
+            var query = _dbContext.Personal.AsQueryable();
+            string ruc = null;
+            DateTime? fechaFin = null;
+
+            if (int.TryParse(mes, out int mesNumerico) && int.TryParse(anio, out int añoNumerico))
+            {
+                // Crear un objeto DateTime con el día siempre igual a 1
+                fechaFin = new DateTime(añoNumerico, mesNumerico, 1);
+            }
+
+            // Aplicar filtros solo si se proporcionan valores no nulos
+            if (!string.IsNullOrEmpty(ruc))
+            {
+                query = query.Where(p => p.Ruc == ruc);
+            }
+
+            if (fechaFin.HasValue)
+            {
+                query = query.Where(p => p.Fec_Nacimiento <= fechaFin.Value);
+            }
+
+            var personalFiltrado = query.ToList();
+
+            var edades = personalFiltrado
+                .Select(p => CalcularEdad(p.Fec_Nacimiento, fechaFin ?? DateTime.Now))
+                .ToList();
+
+            var resultado = new List<ChartsEdades>
+            {
+                new ChartsEdades { rangoEdad = "Edad 18-25 ", cantidad = edades.Count(e => e >= 18 && e <= 25) },
+                new ChartsEdades { rangoEdad = "Edad 26-35 ", cantidad = edades.Count(e => e >= 26 && e <= 35) },
+                new ChartsEdades { rangoEdad = "Edad 36-45 ", cantidad = edades.Count(e => e >= 36 && e <= 45) },
+                new ChartsEdades { rangoEdad = "Edad 46-55 ", cantidad = edades.Count(e => e >= 46 && e <= 55) },
+                new ChartsEdades { rangoEdad = "Edad 56-99 ", cantidad = edades.Count(e => e >= 56 && e <= 100) }
+            };
+            return StatusCode(StatusCodes.Status200OK, resultado);
+
+        }
+        private int CalcularEdad(DateTime fechaNacimiento, DateTime fechaFin)
+        {
+            int edad = fechaFin.Year - fechaNacimiento.Year;
+
+            if (fechaFin.Month < fechaNacimiento.Month || (fechaFin.Month == fechaNacimiento.Month && fechaFin.Day < fechaNacimiento.Day))
+            {
+                edad--;
+            }
+
+            return edad;
+        }
     }
 }
